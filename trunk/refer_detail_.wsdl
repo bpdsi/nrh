@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="wso2" targetNamespace="http://nrh.dyndns.org/production/soap_disaster/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://nrh.dyndns.org/production/soap_disaster/">
+    <wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://nrh.dyndns.org/production/soap_disaster/">
+			<xsd:element name="refer">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PersonID"
+							type="xsd:string">
+						</xsd:element>
+						<xsd:sequence></xsd:sequence>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="referDetails">
+				<xsd:complexType>
+					 <xsd:restriction base="SOAP-ENC:Array">
+						<xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:referHos[]" /> 
+					 </xsd:restriction>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="referHos">
+				<xsd:sequence>
+					<xsd:element name="PersonalID" type="tns:patient"></xsd:element>
+					<xsd:element name="Hospital" type="xsd:string"></xsd:element>
+					<xsd:element name="HospitalNumber" type="xsd:string"></xsd:element>
+					<xsd:element name="refer_time" type="tns:string"></xsd:element>
+					<xsd:element name="department" type="xsd:string"></xsd:element>
+					<xsd:element name="refer_point" type="xsd:string"></xsd:element>
+					<xsd:element name="refer_number" type="xsd:string"></xsd:element>
+					<xsd:element name="refer_cause" type="xsd:string"></xsd:element>
+					<xsd:element name="refer_type" type="xsd:string"></xsd:element>
+					<xsd:element name="refer_date" type="xsd:date"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+        
+        </xsd:schema>
+	</wsdl:types>
+	
+	<wsdl:message name="QueryPatientRequest">
+		<wsdl:part name="QueryPatientRequest"
+			element="tns:refer">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QueryPatientResponse">
+		<wsdl:part name="QueryPatientResponse"
+			element="tns:referDetails">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ReferalType">
+		<wsdl:operation name="QueryRefer">
+			<wsdl:input message="tns:QueryPatientRequest"></wsdl:input>
+			<wsdl:output message="tns:QueryPatientResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ReferalSoapBinding"
+		type="tns:ReferalType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="QueryRefer">
+			<soap:operation
+				soapAction="http://nrh.dyndns.org/production/soap_disaster/refer_detail_service.php" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ReferalService">
+		<wsdl:port name="ReferalPort"
+			binding="tns:ReferalSoapBinding">
+			<soap:address location="http://nrh.dyndns.org/production/soap_disaster/refer_detail_service.php"></soap:address>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

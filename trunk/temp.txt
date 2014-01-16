@@ -1,0 +1,28 @@
+
+			select		person.PersonalID,
+						person.CitizenID,
+						person.Gender,
+						person.GivenName,
+						person.FamilyName,
+						person.BirthDate,
+						person.Nationality,
+						lab_test.HospCode,
+						lab_test.VisitingNumber,
+						lab_test.LabCode,
+						lab_test.PersonalID,
+						lab_test.LabDate,
+						lab_test.Description,
+						lab_test_result.ResultLabID,
+						lab_test_result.UniversalTestID,
+						lab_test_result.ResultLab,
+						lab_test_result.UnitCode,
+						lab_test_result.ResultUniversal,
+						lab_test_result.UnitUniversal,
+						lab_test_result.ReferenceResult,
+						lab_test_result.ReferenceUniversalTest,
+						lab_test_result.LabReporter
+			from		person left join lab_test on person.PersonalID=lab_test.PersonalID  
+						left join  lab_test_result on lab_test.VisitingNumber=lab_test_result.VisitingNumber
+		 where person.CitizenID='3000000000001'  
+			order by	lab_test.VisitingNumber
+		------------------------------------------------------------Numrows : 11

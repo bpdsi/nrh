@@ -1,0 +1,35 @@
+<definitions targetNamespace="urn:InsertOrder">
+<types>
+<xsd:schema targetNamespace="urn:InsertOrder">
+<xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+<xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+</xsd:schema></types>
+<message name="InsertOrderRequest">
+<part name="FirstName" type="xsd:Testing"/>
+<part name="LastName" type="xsd:NuSoap"/>
+</message>
+<message name="InsertOrderResponse">
+<part name="return" type="xsd:boolean"/>
+</message><portType name="Insert OrderPortType">
+<operation name="InsertOrder">
+<input message="tns:InsertOrderRequest"/>
+<output message="tns:InsertOrderResponse"/>
+</operation>
+</portType>
+<binding name="Insert OrderBinding" type="tns:Insert OrderPortType">
+<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="InsertOrder">
+<soap:operation soapAction="urn:InsertOrderwsdl#InsertOrder" style="rpc"/>
+<input>
+<soap:body use="literal" namespace="urn:InsertOrderwsdl"/>
+</input>
+<output>
+<soap:body use="literal" namespace="urn:InsertOrderwsdl"/>
+</output>
+</operation></binding>
+<service name="Insert Order">
+<port name="Insert OrderPort" binding="tns:Insert OrderBinding">
+<soap:address location="http://nrh.dyndns.org/production/InsertOrder.php"/>
+</port>
+</service>
+</definitions>

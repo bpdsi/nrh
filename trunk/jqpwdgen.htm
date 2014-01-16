@@ -1,0 +1,100 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<meta name="robots" content="all" />
+<title>jQuery Demo - Random Password Generator</title>
+<script type="text/JavaScript">
+$.extend({
+  password: function (length, special) {
+    var iteration = 0;
+    var password = "";
+    var randomNumber;
+    if(special == undefined){
+        var special = false;
+    }
+    while(iteration < length){
+        randomNumber = (Math.floor((Math.random() * 100)) % 94) + 33;
+        if(!special){
+            if ((randomNumber >=33) && (randomNumber <=47)) { continue; }
+            if ((randomNumber >=58) && (randomNumber <=64)) { continue; }
+            if ((randomNumber >=91) && (randomNumber <=96)) { continue; }
+            if ((randomNumber >=123) && (randomNumber <=126)) { continue; }
+        }
+        iteration++;
+        password += String.fromCharCode(randomNumber);
+    }
+    return password;
+  }
+});
+$(document).ready(function() {
+	$('.link-password').click(function(e){
+		linkId = $(this).attr('id');
+		if (linkId == 'generate'){
+			//password = $.password(12,true);
+			password = $.password(8);
+			$('#random').empty().hide().append(password).fadeIn('slow');
+			$('#confirm').fadeIn('slow');
+		} else {
+			$('#input-password').val(password);
+			$('#random').empty();
+			$(this).hide();
+		}
+		e.preventDefault();
+	});
+});
+</script>
+
+<style type="text/css">
+.wrap {width: 960px; margin: 20px auto;}
+/*Form styles*/
+.styled {font-family: Arial, sans-serif;}
+.styled fieldset {padding: 10px;}
+.styled fieldset ol, .styled fieldset ol li {list-style: none;}
+.styled fieldset li.form-row {margin-bottom: 7px; padding: 2px 0; width: 100%; overflow: hidden; position: relative;}
+.styled label {font-size: 12px; display: block; font-weight: bold; float: left; width: 100px; margin-left: 5px; line-height: 24px;}
+.styled input.text-input, .styled .text-area {background: #fefefe; border-top: 1px solid #909090; border-right: 1px solid #cecece; border-bottom: 1px solid #e1e1e1; border-left: 1px solid #bbb; padding: 3px; width: 190px; font-size: 12px;}
+.styled input.text-input.default.active, .styled .text-area.default.active {color: #666666; font-style: italic;}
+.styled fieldset li.button-row {margin-bottom: 0; padding: 2px 5px;}
+form input.btn-submit {padding: 3px 7px; font-family: Arial, sans-serif; color: #000; font-weight: bold; border: 1px solid #000; background: #FFE220; font-size: 12px;}
+.link-password {margin-left: 10px;}
+/* Form Validation */
+.styled span.error {font-size: 11px; background: none; display: block; padding: 2px; text-align: center;}
+.styled fieldset li.error {color: #D8000C; background: #fff0f0 url(../media/images/checkers.png) repeat; border: 1px solid #f9c7c7; padding: 5px 0;}
+.styled fieldset li.error label {text-align: left;}
+
+/* Specific Form Rules */
+#form-demo {width: 330px; margin: 50px 0 100px 0; height: 170px; padding: 25px 10px 0 10px; background: url(images/bg_login.png) no-repeat 0 0;}
+#confirm {display: none;}
+.success {order: 1px solid; margin: 0; padding: 10px; text-align: center; color: #4F8A10; background-color: #ebf6d9; border-color: #DFF2BF;}
+</style>
+</head>
+<body id="demo">
+	  <div class="wrap">
+	
+	    <h2 class="page-title">jQuery Demo: Random Password Generator</h2>
+		  <form id="form-demo" class="styled" action="test_submit.htm" method="post">
+		    <fieldset>
+			  <ol>
+			    <li class="form-row">
+				  <label>User Name:</label>
+				  <input id="input-user" type="text" class="text-input" name="user" value="" />
+				</li>
+				<li class="form-row">
+				  <label>Password:</label>
+				  <input id="input-password" type="password" class="text-input password" name="password" value="" /><br />
+				</li>
+				<li class="form-row text-right">
+				<a href="#" class="link-password" id="generate">Generate Password</a> <a href="#" class="link-password" id="confirm">Use Password</a>
+				</li>
+				<li class="form-row text-right" id="random">
+				</li>
+			  </ol>
+			</fieldset>
+		  </form>
+		  <p class="clear"><a href="http://www.designchemical.com/blog/index.php/jquery/random-password-generator-using-jquery/">Return to blog post</a></p>
+	  </div>
+</body>
+</html>

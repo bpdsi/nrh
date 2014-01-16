@@ -1,0 +1,12 @@
+$(document).ready(function(){
+	$('.nextFocus').keypress(function(e){
+		if(e.keyCode==13){
+			$('#'+$(this).attr('next')).focus();
+		}
+	});
+	$('.nextClick').keypress(function(e){
+		if(e.keyCode==13){
+			$('#'+$(this).attr('next')).click();
+		}
+	});
+});
