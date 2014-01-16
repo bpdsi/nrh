@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="wso2" targetNamespace="http://127.0.0.1/soap_health/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://127.0.0.1/soap_health/">
+    <wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://127.0.0.1/soap_health/">
+			<xsd:element name="labOrder">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="HospCode" type="xsd:string"></xsd:element>
+						<xsd:element name="HospitalNumber" type="xsd:string"></xsd:element>
+						<xsd:element name="VisitingNumber" type="xsd:string"></xsd:element>
+						<xsd:element name="CitizenID" type="xsd:string"></xsd:element>
+						<xsd:element name="LabDate" type="tns:datetime"></xsd:element>
+						<xsd:element name="Description" type="tns:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="labresult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="VisitingNumber" type="xsd:string"></xsd:element>
+						<xsd:element name="UniversalTestID" type="xsd:integer"></xsd:element>
+						<xsd:element name="UniversalTestName" type="xsd:string"></xsd:element>
+						<xsd:element name="ResultLab" type="xsd:string"></xsd:element>
+						<xsd:element name="UnitID" type="xsd:string"></xsd:element>
+						<xsd:element name="UnitName" type="xsd:string"></xsd:element>
+						<xsd:element name="ResultUniversal" type="xsd:string"></xsd:element>
+						<xsd:element name="UnitUniversal" type="xsd:string"></xsd:element>
+						<xsd:element name="ReferenceResult" type="xsd:string"></xsd:element>
+						<xsd:element name="ReferenceUniversalTest" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+        
+        </xsd:schema>
+	</wsdl:types>
+	
+	<wsdl:message name="ImportLabRequest">
+		<wsdl:part name="QueryLabRequest"
+			element="tns:labOrder">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ImportLabReponse">
+		<wsdl:part name="return" type="xsd:boolean"/>
+	</wsdl:message>
+	<wsdl:portType name="InsertLabType">
+		<wsdl:operation name="InsertLab">
+			<wsdl:input message="tns:ImportLabRequest"></wsdl:input>
+			<wsdl:output message="tns:ImportLabReponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="LabSoapBinding"
+		type="tns:LabType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="InsertLab">
+			<soap:operation
+				soapAction="http://127.0.0.1/soap_health/lab_manage.php" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Insert LabService">
+		<wsdl:port name="Insert LabPort"
+			binding="tns:Insert LabSoapBinding">
+			<soap:address location="http://127.0.0.1/soap_health/lab_manage.php"></soap:address>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

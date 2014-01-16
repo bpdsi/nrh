@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="wso2" targetNamespace="http://nrh.dyndns.org/production/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://nrh.dyndns.org/production/">
+    <wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://nrh.dyndns.org/production/">
+			<xsd:element name="lab">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="CitizenID"
+							type="xsd:string">
+						</xsd:element>
+						<xsd:element name="StartDate"
+							type="xsd:string">
+						</xsd:element>
+						<xsd:element name="EndDate"
+							type="xsd:string">
+						</xsd:element>
+						<xsd:sequence></xsd:sequence>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="labDetails">
+				<xsd:complexType>
+					 <xsd:restriction base="SOAP-ENC:Array">
+						<xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:labOrder[]" /> 
+					 </xsd:restriction>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="labOrder">
+				<xsd:sequence>
+					<xsd:element name="Hospital" type="tns:labresult"></xsd:element>
+					<xsd:element name="VisitingNumber" type="tns:labresult"></xsd:element>
+					<xsd:element name="LabID" type="xsd:integer"></xsd:element>
+					<xsd:element name="PersonalID" type="xsd:patient"></xsd:element>
+					<xsd:element name="LabDate" type="tns:datetime"></xsd:element>
+					<xsd:element name="Description" type="tns:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="patient">
+				<xsd:sequence>
+					<xsd:element name="PersonalID" type="tns:integer"></xsd:element>
+					<xsd:element name="HospitalNumber" type="xsd:hosDetail"></xsd:element>
+					<xsd:element name="CitizenID" type="tns:persondetail"></xsd:element>
+					<xsd:element name="FatherName" type="xsd:string"></xsd:element>
+					<xsd:element name="MotherName" type="xsd:string"></xsd:element>
+					<xsd:element name="SpouseName" type="xsd:string"></xsd:element>
+					<xsd:sequence></xsd:sequence>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="persondetail">
+            	<xsd:sequence>
+            		<xsd:element name="Prefix" type="xsd:string"></xsd:element>
+            		<xsd:element name="GivenName" type="xsd:string"></xsd:element>
+            		<xsd:element name="MiddleName" type="xsd:string"></xsd:element>
+            		<xsd:element name="FamilyName" type="xsd:string"></xsd:element>
+            		<xsd:element name="NameSuffix" type="xsd:string"></xsd:element>
+					<xsd:element name="Gender" type="xsd:string"></xsd:element>
+					<xsd:element name="BirthDate" type="xsd:string"></xsd:element>
+					<xsd:element name="BirthJurisdictionCountrySubDivision" type="tns:address"></xsd:element>
+					<xsd:element name="Race" type="xsd:string"></xsd:element>
+					<xsd:element name="Nationality" type="xsd:string"></xsd:element>
+					<xsd:element name="Religion" type="xsd:string"></xsd:element>
+					<xsd:element name="Living" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+			</xsd:complexType>
+			
+            <xsd:complexType name="address">
+            	<xsd:sequence>
+            		<xsd:element name="name" type="xsd:string"></xsd:element>
+            		<xsd:element name="street" type="xsd:string"></xsd:element>
+            		<xsd:element name="city" type="xsd:string"></xsd:element>
+            		<xsd:element name="state" type="xsd:string"></xsd:element>
+            		<xsd:element name="zip" type="xsd:decimal"></xsd:element>
+            	</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="hosDetail">
+            	<xsd:sequence>
+            		<xsd:element name="Hospital" type="xsd:string"></xsd:element>
+            		<xsd:element name="HospitalName" type="xsd:string"></xsd:element>
+            		<xsd:element name="ContactPerson" type="xsd:string"></xsd:element>
+            		<xsd:element name="Coordinator" type="xsd:string"></xsd:element>
+            		<xsd:element name="Telephone" type="xsd:string"></xsd:element>
+            		<xsd:element name="CallSign" type="xsd:string"></xsd:element>
+            		<xsd:element name="Address" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="labresult">
+            	<xsd:sequence>
+            		<xsd:element name="ResultLabID" type="xsd:integer"></xsd:element>
+            		<xsd:element name="VisitingNumber" type="xsd:string"></xsd:element>
+            		<xsd:element name="UniversalTestID" type="xsd:integer"></xsd:element>
+            		<xsd:element name="ResultLab" type="xsd:string"></xsd:element>
+            		<xsd:element name="UnitID" type="xsd:string"></xsd:element>
+            		<xsd:element name="ResultUniversal" type="xsd:string"></xsd:element>
+            		<xsd:element name="UnitUniversal" type="xsd:string"></xsd:element>
+            		<xsd:element name="ReferenceResult" type="xsd:string"></xsd:element>
+            		<xsd:element name="ReferenceUniversalTest" type="xsd:string"></xsd:element>
+            		<xsd:element name="LabReporter" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+			</xsd:complexType>
+        
+        </xsd:schema>
+	</wsdl:types>
+	
+	<wsdl:message name="QueryLabRequest">
+		<wsdl:part name="QueryLabRequest"
+			element="tns:lab">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QueryLabResponse">
+		<wsdl:part name="QueryLabResponse"
+			element="tns:labDetails">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="LabType">
+		<wsdl:operation name="QueryLab">
+			<wsdl:input message="tns:QueryLabRequest"></wsdl:input>
+			<wsdl:output message="tns:QueryLabResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="LabSoapBinding"
+		type="tns:LabType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="QueryLab">
+			<soap:operation
+				soapAction="http://nrh.dyndns.org/production/lab_service.php" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="LabService">
+		<wsdl:port name="LabPort"
+			binding="tns:LabSoapBinding">
+			<soap:address location="http://nrh.dyndns.org/production/lab_service.php"></soap:address>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
