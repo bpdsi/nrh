@@ -4,6 +4,8 @@
 	$mainUrl=get_cfgValue("mainUrl");
 	if(patientAuthenticated()){
 		header("location:../home");
+	}else if(adminAuthenticated()){
+		header("location:../admin");
 	}
 	if($Hospital==""){
 		$Hospital=11470;

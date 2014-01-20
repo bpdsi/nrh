@@ -120,8 +120,21 @@
 		return $row[hospitalname];
 	}
 	
-	function staffAuthenticated(){
-		return true;
+	function adminAuthenticated(){
+		session_start();
+		host("nrh");
+		$query="
+			select	*
+			from	admin
+			where	User='".$_SESSION["admin_User"]."' and
+					Password='".$_SESSION["admin_Password"]."'
+		";
+		$result=mysql_query($query);
+		if(mysql_num_rows($result)>0){
+			return "admin";
+		}else{
+			return false;
+		}
 	}
 	
 	function patientAuthenticated(){

@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	include "../function/functionPHP.php";
-	host("hrh");
+	host("nrh");
 	$User=$_POST["User"];
 	$Password=$_POST["Password"];
 	$query="

@@ -3,27 +3,46 @@
 	include "../function/functionPHP.php";
 	noCache();
 	$authen=patientAuthenticated();
-	if(!$authen){
-		header("location:../authen/index.php");
-		exit();
+	$adminAuthen=adminAuthenticated();
+	
+	if($functionName=="Administrator"){
+		if(!$adminAuthen){
+			header("location:../admin/authen.php");
+			exit();
+		}
+	}else{
+		if(!$authen){
+			header("location:../authen/index.php");
+			exit();
+		}
 	}
+		
 	host("nrh");
 	
-	if($authen=="person"){
+	if($functionName=="Administrator"){
 		$query="
 			select	*
-			from	person
-			where	User='".$_SESSION["sess_User"]."'
+			from	admin
+			where	User='".$_SESSION["admin_User"]."'
 		";
-		$vcPrefix="vc";		
-	}else if($authen=="vc_person"){
-		$query="
-			select	*
-			from	vc_person
-			where	User='".$_SESSION["sess_vc_User"]."'
-		";
-		$vcPrefix="vcp";
+	}else{
+		if($authen=="person"){
+			$query="
+				select	*
+				from	person
+				where	User='".$_SESSION["sess_User"]."'
+			";
+			$vcPrefix="vc";		
+		}else if($authen=="vc_person"){
+			$query="
+				select	*
+				from	vc_person
+				where	User='".$_SESSION["sess_vc_User"]."'
+			";
+			$vcPrefix="vcp";
+		}		
 	}
+
 	$result=mysql_query($query);
 	$person=mysql_fetch_array($result);
 	
@@ -197,4 +216,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="home_body" style="vertical-align: top;">
+					<?php
+						if($adminAuthen){
+							?><td class="home_body" style="vertical-align: top;padding: 0px;"><?php
+						}else{
+							?><td class="home_body" style="vertical-align: top;"><?php
+						}
+					?>
