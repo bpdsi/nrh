@@ -85,7 +85,11 @@
 						$.post('configurationSQL.php',
 								$('#configForm').serialize()
 							,function(data){
-								alert(data);
+								if(data=='complete'){
+									alert('บันทึกเรียบร้อย');
+								}else{
+									alert('ไม่สามารถบันทึกข้อมูลได้');
+								}
 							}
 						);
 					"
