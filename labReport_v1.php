@@ -16,8 +16,8 @@
 					where LabID='$LabID' and LabName='$LabName' and HospCode='$HospCode'";
 		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 		$rowCheck=mysql_fetch_array($rCheck);
-		$LabIDx=$rowCheck["LabCode"];
-		if($LabIDx==""){
+		$LabID=$rowCheck["LabCode"];
+		if($LabID==""){
 			$sqlInsert="insert into lab(LabID, LabName, HospCode) values('$LabID', '$LabName', '$HospCode')";
 			$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
 			
@@ -26,9 +26,9 @@
 			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 			$rowCheck=mysql_fetch_array($rCheck);
 			$LabID=$rowCheck["LabCode"];
-			return $LabIDx;	
+			return $LabID;	
 		}else{
-			return $LabIDx;
+			return $LabID;
 		}
 	}
 	function checkWard($WardName, $HospCode){
@@ -72,15 +72,15 @@
 		return $MethodID;
 	}
 	function checkUnit($UnitID, $UnitName, $HospCode){
-		$UnitIDx="";
+		$UnitID="";
 		if(trim($UnitName)!=""){
 			$UnitName=mysql_escape_string($UnitName);
 			$sqlCheck="select UnitCode, UnitID, UnitName from unit 
 						where UnitID='$UnitID' and UnitName='$UnitName' and HospCode='$HospCode'";
 			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 			$rowCheck=mysql_fetch_array($rCheck);
-			$UnitIDx=$rowCheck["UnitCode"];
-			if($UnitIDx==""){
+			$UnitID=$rowCheck["UnitCode"];
+			if($UnitID==""){
 				$sqlInsert="insert into unit(UnitID, UnitName, HospCode) values('$UnitID','$UnitName', '$HospCode')";
 				$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
 				
@@ -88,13 +88,13 @@
 						where UnitID='$UnitID' and UnitName='$UnitName' and HospCode='$HospCode'";
 				$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 				$rowCheck=mysql_fetch_array($rCheck);
-				$UnitIDx=$rowCheck["UnitCode"];
-				return $UnitIDx;	
+				$UnitID=$rowCheck["UnitCode"];
+				return $UnitID;	
 			}else{
-				return $UnitIDx;
+				return $UnitID;
 			}
 		}
-		return $UnitIDx;
+		return $UnitID;
 	}
 	//echo checkUnit("mg/dl");
 	function checkUTest($UniversalTestName,$MethodID, $HospCode){
@@ -124,13 +124,10 @@
 		}
 	}
 	function checkPerson($CitizenID){
-		$PersonalID="";
 		$sqlCheck="select PersonalID from person where CitizenID='$CitizenID'";
 		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 		$rowCheck=mysql_fetch_array($rCheck);
-		if($rowCheck["PersonalID"]!=""){
-			$PersonalID=$rowCheck["PersonalID"];
-		}
+		$PersonalID=$rowCheck["PersonalID"];
 		return $PersonalID;
 	}
 	function checkLabTestID($LabTestID){
@@ -157,62 +154,61 @@
 		//$string.=getString($params["CitizenID"]);
 		
 		//=============== Parse Patient Element ===================
-		$DocumentID=$params["SetId"]["!extension"];
-		$versionNumber=$params["VersionNumber"]["!value"];
+		$DocumentID=$params["setId"]["!extension"];
+		$versionNumber=$params["versionNumber"]["!value"];
 		
 		$DocumentIDx.="<tr><td>Document</td><td>".$DocumentID."</td></tr>";
 		$DocumentIDx.="<tr><td>Document</td><td>".$versionNumber."</td></tr>";
 		
-		$CitizenID=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["CitizenID"];
-		$string.= "<br>xxx".$CitizenID."xxx<br>";
-		$Prefix=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["PersonName"]["Prefix"];
-		$GivenName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["PersonName"]["GivenName"];
-		$MiddleName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["PersonName"]["MiddleName"];
-		$FamilyName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["PersonName"]["FamilyName"];
-		$Birthdate=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Birthdate"];
-		$BirthJurisdictionCountrySubDivision=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["BirthJurisdictionCountrySubDivision"];
-		$Nationality=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Nationality"];
-		$Gender=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Gender"];
-		$Religion=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Religion"];
-		$LifeStatus=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["LifeStatus"];
-		$Telephone=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Telephone"];
-		$Email=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Email"];
-		$HospCode=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["HospCode"];
-		$Age=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["Age"];
-		$HospitalNumber=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["HospitalNumber"];
-		$AdmissionNumber=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["AdmissionNumber"];
-		$BloodGroupABO=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["BloodGroupABO"];
-		$BloodTypeRh=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["BloodTypeRh"];
-		$PreDiagnosis=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["PreDiagnosis"];
-		$InsType=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["Patient"]["InsType"];
+		$CitizenID=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["CitizenID"];
+		$Prefix=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["personName"]["Prefix"];
+		$GivenName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["personName"]["GivenName"];
+		$MiddleName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["personName"]["MiddleName"];
+		$FamilyName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["personName"]["FamilyName"];
+		$Birthdate=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Birthdate"];
+		$BirthJurisdictionCountrySubDivision=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["BirthJurisdictionCountrySubDivision"];
+		$Nationality=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Nationality"];
+		$Gender=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Gender"];
+		$Religion=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Religion"];
+		$LifeStatus=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["LifeStatus"];
+		$Telephone=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Telephone"];
+		$Email=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Email"];
+		$HospCode=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["HospCode"];
+		$Age=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["Age"];
+		$HospitalNumber=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["HospitalNumber"];
+		$AdmissionNumber=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["AdmissionNumber"];
+		$BloodGroupABO=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["BloodGroupABO"];
+		$BloodTypeRh=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["BloodTypeRh"];
+		$PreDiagnosis=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["PreDiagnosis"];
+		$InsType=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["patient"]["InsType"];
 		//=============== Finish Parse Patient Element ===================
 		
-		//=============== Parse LabResult Element ===================
-		$VisitingNumber=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["VisitingNumber"];
-		$LabID=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabID"];
-		$LabName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabName"];
-		$LabDate=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabDate"];
-		$WardID=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["WardID"];
-		$WardName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["WardName"];
-		//=============== Parse sub LabResult Requestr Element ===================
-		$RequestCitizenID=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["CitizenID"];
-		$RequestPrefix=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["PersonName"]["Prefix"];
-		$RequestGivenName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["PersonName"]["GivenName"];
-		$RequestMiddleName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["PersonName"]["MiddleName"];
-		$RequestFamilyName=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["PersonName"]["FamilyName"];
-		$RequestBirthdate=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["Birthdate"];
-		$RequestBirthJurisdictionCountrySubDivision=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["BirthJurisdictionCountrySubDivision"];
-		$RequestNationality=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["Nationality"];
-		$RequestGender=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["Gender"];
-		$RequestReligion=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["Religion"];
-		$RequestLifeStatus=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["LifeStatus"];
-		$RequestEmail=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["Email"];
-		$RequestTelephone=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabRequester"]["Telephone"];
-		//=============== Finish Parse sub LabResult Requestr Element ===================
-		//=============== Finish Parse LabResult Element ===================
+		//=============== Parse labResult Element ===================
+		$VisitingNumber=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["VisitingNumber"];
+		$LabID=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["LabID"];
+		$LabName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["LabName"];
+		$LabDate=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["LabDate"];
+		$WardID=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["WardID"];
+		$WardName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["WardName"];
+		//=============== Parse sub labResult Requestr Element ===================
+		$RequestCitizenID=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["CitizenID"];
+		$RequestPrefix=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["personName"]["Prefix"];
+		$RequestGivenName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["personName"]["GivenName"];
+		$RequestMiddleName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["personName"]["MiddleName"];
+		$RequestFamilyName=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["personName"]["FamilyName"];
+		$RequestBirthdate=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["Birthdate"];
+		$RequestBirthJurisdictionCountrySubDivision=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["BirthJurisdictionCountrySubDivision"];
+		$RequestNationality=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["Nationality"];
+		$RequestGender=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["Gender"];
+		$RequestReligion=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["Religion"];
+		$RequestLifeStatus=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["LifeStatus"];
+		$RequestEmail=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["Email"];
+		$RequestTelephone=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labRequester"]["Telephone"];
+		//=============== Finish Parse sub labResult Requestr Element ===================
+		//=============== Finish Parse labResult Element ===================
 		
-		//=============== Parse LabResult detail Element ===================
-		$LabDetail=$params["Component"]["StructuredBody"]["Component"]["Section"]["Entry"]["LabReport"]["LabResult"]["LabResultDetail"];
+		//=============== Parse labResult detail Element ===================
+		$LabDetail=$params["component"]["structuredBody"]["component"]["section"]["entry"]["labReport"]["labResult"]["labResultDetail"];
 		
 		$universalTestNamex="";
 		
@@ -225,7 +221,6 @@
 			$BloodTypeRh=$BloodTypeRh;
 			$PreDiagnosis=$PreDiagnosis;
 			$InsuranceType=$InsType;
-			$string.="$CitizenID,$PersonalID,$HospCode";
 			$checkHavePatient=checkPateint($PersonalID,$HospCode);
 			$universalTestNamex.="<tr><td>Check pateint type</td><td>$checkHavePatient</td></tr>";
 			if($checkHavePatient=="insert"){
@@ -241,7 +236,6 @@
 			$VisitingNumber=$VisitingNumber;
 			$HospCode=$HospCode;
 			$StaffID=checkStaff($RequestCitizenID);
-			if($StaffID=="")$StaffID=0;
 			$WardID=checkWard($WardName,$HospCode);
 			$LabCode=checkLab($LabID,$LabName,$HospCode);
 			$LabDate=$LabDate;
@@ -256,7 +250,7 @@
 				$versionNumber_Old="";
 				//$universalTestNamex.="<tr><td>Check Array</td><td>Not Array |$LabTestID_Old::$versionNumber_Old|</td></tr>";
 			}
-			$universalTestNamex.="<tr><td>rr</td><td>".$LabTestID_Old."::".$versionNumber_Old."</td></tr>";
+			//$universalTestNamex.="<tr><td>rr</td><td>".$checkLabTestIDx[0]."::".$checkLabTestIDx[1]."</td></tr>";
 			$resultCheck="";
 			if(trim($LabTestID_Old)==""){
 				$sqlInsertlab_test="insert into lab_test(LabTestID, versionNumber, PersonalID, VisitingNumber, HospCode, StaffID, WardID, LabCode, LabDate)values('$LabTestID', '$versionNumber', $PersonalID, '$VisitingNumber', '$HospCode', $StaffID, $WardID, $LabCode, '$LabDate')";
@@ -274,10 +268,7 @@
 			//$universalTestNamex.="<tr><td>Lab Request Manage</td><td>".$sqlInsertlab_test."</td></tr>";
 		//=========== Finsih Lab Request Insert ==============	
 		//$universalTestNamex="";
-		$universalTestNamex.="<tr><td>Count Result Detail</td><td>".count($LabDetail)."</td></tr>";
-		if(count($LabDetail)==14)$numLab=1;
-		else $numLab=count($LabDetail);
-		for($n=0;$n<$numLab;$n++){
+		for($n=0;$n<count($LabDetail);$n++){
 			$LabDetailA=$LabDetail[$n];
 			
 			//===========Lab Result Detail ==============
@@ -301,12 +292,9 @@
 		
 			
 			$UnitCode=checkUnit($UnitID, $UnitName,$HospCode);
-			if($UnitCode=="")$UnitCode=0;
 			$UnitUniversal=checkUnit("",$UnitUniversal,$HospCode);
 			$ReferenceUniversalTest="";
 			$LabReporter=checkStaff($LabReporterx);
-			if($LabReporter=="")$LabReporter=0;
-			
 			if(trim($UnitUniversal)=="")$UnitUniversal="Null";
 			if($resultCheck=="insert"){
 				$sqlInsertlab_test_result="insert into lab_test_result(LabTestID, VisitingNumber, HospCode, UniversalTestID, ResultLab, UnitCode, ReferenceResult, ResultUniversal, UnitUniversal, ReferenceUniversalTest, LabResultDate, LabReporter)values('$LabTestID', '$VisitingNumber', '$HospCode', $UniversalTestID, '$ResultLab', $UnitCode, '$ReferenceResult', '$ResultUniversal', $UnitUniversal, '$ReferenceUniversalTest', '$LabResultDate', $LabReporter)";
