@@ -82,11 +82,12 @@
 			<td colspan="2" style="text-align: right">
 				<input type="button" value="บันทึก"
 					onclick="
-						$.post('configurationSQL.php',
+						$.post('preferenceSQL.php',
 								$('#configForm').serialize()
 							,function(data){
 								if(data=='complete'){
 									alert('บันทึกเรียบร้อย');
+									$('#container').html('');
 								}else{
 									alert('ไม่สามารถบันทึกข้อมูลได้');
 								}

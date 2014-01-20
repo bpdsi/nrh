@@ -14,14 +14,14 @@
 	$(function(){
 		$('document').ready(function(){
 			$('#menu_config').click(function(){
-				$.post('configuration.php',function(data){
+				$.post('preference.php',function(data){
 					$('#container').html(data);
+				})
+			});
 
-					$('div.cfgValue').click(function(){
-						$(this).hide();
-						$(this).next().show();
-						$(this).next().focus();
-					});
+			$('#menu_administrator').click(function(){
+				$.post('administrator.php',function(data){
+					$('#container').html(data);
 				})
 			});
 		});
@@ -51,10 +51,14 @@
 </style>
 <table style="width: 100%;height: 100%;">
 	<tr>
-		<td style="border-right: 1px solid #aaa;" valign="top">
-			<table style="width: 100%;">
+		<td style="border-right: 1px solid #aaa;text-align: center;" valign="top">
+			<img src="adminIcon.png" style="margin-left: auto;margin-right: auto;">
+			<table style="width: 100%;text-align: left;">
 				<tr>
-					<td id="menu_config" class="mainMenu_item">Configuaration</td>
+					<td id="menu_administrator" class="mainMenu_item">เจ้าหน้าที่</td>
+				</tr>
+				<tr>
+					<td id="menu_config" class="mainMenu_item">การตั้งค่า</td>
 				</tr>
 				<tr>
 					<td class="mainMenu_item">Unit</td>
