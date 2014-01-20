@@ -1,4 +1,7 @@
 <?php
+	$functionName="Administrator";
+	include "../template/header.php"; 
+
 	include "../config/connection.php";
 	include "../function/functionPHP.php";
 	$mainUrl=get_cfgValue("mainUrl");
@@ -105,3 +108,6 @@
 		</div>
 	</body>
 </html>
+<?php
+	include "../template/footer.php"; 
+?>
