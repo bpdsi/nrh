@@ -85,7 +85,6 @@
 		</style>
 	</head>
 	<body onload="$('#CitizenID').focus()">
-		<input type="hidden" id="refer_url" value="http://nrh.dyndns.org/production/refer_service.php">
 		<div class="form" style="width: 640px;margin-left: auto;margin-right: auto;">
 			<table class="form" style="width: 100%;">
 				<tr>

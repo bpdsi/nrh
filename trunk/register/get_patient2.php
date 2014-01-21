@@ -36,9 +36,5 @@
 		}
 	}
 	$returnValue=getPatient($hospCode,$hospitalNumber);
-	if($returnValue!=""){
-		echo $returnValue["Patient"]["PersonName"]["Prefix"]."::".$returnValue["Patient"]["PersonName"]["GivenName"]."::".$returnValue["Patient"]["PersonName"]["MiddleName"]."::".$returnValue["Patient"]["PersonName"]["FamilyName"]."::".$returnValue["Patient"]["BirthDate"]."::".$returnValue["Patient"]["Gender"]."::".$returnValue["Patient"]["Telephone"]."::".$returnValue["Patient"]["Email"]."::".$returnValue["Patient"]["BloodGroupABO"]."::".$returnValue["Patient"]["BloodTypeRh"]."::".$returnValue["Patient"]["HospitalNumber"];
-	}else{
-		echo "fail";
-	}
+	echo $returnValue["Patient"]["PersonName"]["Prefix"]."::".$returnValue["Patient"]["PersonName"]["GivenName"]."::".$returnValue["Patient"]["PersonName"]["MiddleName"]."::".$returnValue["Patient"]["PersonName"]["FamilyName"]."::".$returnValue["Patient"]["BirthDate"]."::".$returnValue["Patient"]["Gender"]."::".$returnValue["Patient"]["Telephone"]."::".$returnValue["Patient"]["Email"]."::".$returnValue["Patient"]["BloodGroupABO"]."::".$returnValue["Patient"]["BloodTypeRh"]."::".$returnValue["Patient"]["HospitalNumber"];
 ?>

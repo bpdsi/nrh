@@ -12,6 +12,7 @@
 					$.post('showAdmin.php',{
 							hospcode: $(this).val()
 						},function(data){
+							$('#contentTD').html(data);
 						}
 					)
 				"
