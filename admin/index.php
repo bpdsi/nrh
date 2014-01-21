@@ -24,6 +24,10 @@
 					$('#container').html(data);
 				})
 			});
+
+			$('#menu_patientRegist').click(function(){
+				window.open('../register','_self');
+			});
 		});
 	})
 </script>
@@ -54,6 +58,9 @@
 		<td style="border-right: 1px solid #aaa;text-align: center;" valign="top">
 			<img src="adminIcon.png" style="margin-left: auto;margin-right: auto;">
 			<table style="width: 100%;text-align: left;">
+				<tr>
+					<td id="menu_patientRegist" class="mainMenu_item">ลงทะเบียนขอใช้สิทธิ์</td>
+				</tr>
 				<tr>
 					<td id="menu_administrator" class="mainMenu_item">เจ้าหน้าที่</td>
 				</tr>

@@ -62,7 +62,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>NRH-Databank</title>
+		<title>Personal Health Databank</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<!-- CSS -->
 			<link rel="stylesheet" type="text/css" media="screen" href="../css/npr.css">
@@ -138,7 +138,13 @@
 
 			$('document').ready(function(){
 				$('.menu_logout').click(function(){
-					window.open('../authen/logout.php','_self');
+					<?php
+						if($functionName=="Administrator"){
+							?>window.open('../admin/logout.php','_self');<?php
+						}else{
+							?>window.open('../authen/logout.php','_self');<?php
+						}
+					?>
 				});
 			})
 		</script>
@@ -207,10 +213,14 @@
 					<td class="home_menu">
 						<div class="functionName"><?php echo $functionName;?></div>
 						<?php
-							if($authen=="person"){
-								?><div>Welcome <?php echo $_SESSION["sess_Person"]["PersonName"]?> <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
+							if($functionName=="Administrator"){
+								?><div>Welcome <?php echo $_SESSION["admin_Person"]["PersonName"]?> [Administrator] <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
 							}else{
-								?><div>Welcome <?php echo $_SESSION["sess_vc_Person"]["PersonName"]?> <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
+								if($authen=="person"){
+									?><div>Welcome <?php echo $_SESSION["sess_Person"]["PersonName"]?> <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
+								}else{
+									?><div>Welcome <?php echo $_SESSION["sess_vc_Person"]["PersonName"]?> <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
+								}
 							}
 						?>
 					</td>
