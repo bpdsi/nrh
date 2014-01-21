@@ -60,31 +60,6 @@
 			<script src="../function/functionJAVA.js" type="text/javascript"></script>
 			
 		<script type="text/javascript">
-			(function($){
-				$.unserialize = function(serializedString){
-					var str = decodeURI(serializedString);
-					var pairs = str.split('&');
-					var obj = {}, p, idx, val;
-					for (var i=0, n=pairs.length; i < n; i++) {
-						p = pairs[i].split('=');
-						idx = p[0];
-			 
-						if (idx.indexOf("[]") == (idx.length - 2)) {
-							// Eh um vetor
-							var ind = idx.substring(0, idx.length-2)
-							if (obj[ind] === undefined) {
-								obj[ind] = [];
-							}
-							obj[ind].push(p[1]);
-						}
-						else {
-							obj[idx] = p[1];
-						}
-					}
-					return obj;
-				};
-			})(jQuery);
-		
 			function dateDisplayConvert(date){
 				if(date.indexOf("-")){
 					date=date.split("-");
@@ -136,14 +111,46 @@
 
 			    $("#MemberDetails").html('');
 			    $("#MemberDetails").addClass("loading");
-				var params = '<SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Body><ns7030:QueryPatient xmlns:ns7030="http://tempuri.org"><PersonID xsi:type="xsd:string">'+ $('#CitizenID').val() +'</PersonID><Hospital xsi:type="xsd:string">'+ $('#Hospital').val() +'</Hospital><HospitalNumber xsi:type="xsd:string">'+ $('#HospitalNumber').val() +'</HospitalNumber></ns7030:QueryPatient></SOAP-ENV:Body></SOAP-ENV:Envelope>';
+				var params = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.nhis.nectec.or.th"><soapenv:Header/><soapenv:Body><ws:getInfo><RequestPatient><hospCode>11470</hospCode><hospitalNumber>20/51</hospitalNumber></RequestPatient></ws:getInfo></soapenv:Body></soapenv:Envelope>';
 
 				var wss = {};
 
 				url=$('#refer_url').val();
-				$.soap({
+
+				$.ajax({
+				    url: url,
+				    type: "POST",
+				    dataType: "xml",
+				    contentType: "text/xml; charset=\"utf-8\"",
+				    headers: {
+				        SOAPAction: "http://164.115.24.113:8082/getPatientProxy"
+				    },
+				    data: params,
+				    success: function(soapResponse){
+				    	alert('success');
+				    },
+				    error: function(soapResponse){
+				    	alert('error');
+					}
+				});
+
+				/*$.ajax({
+				    url: url, 
+				    type: "POST",
+				    dataType: "xml", 
+				    data: params, 
+				    processData: false,
+				    contentType: "text/xml; charset=\"utf-8\"",
+				    success: function(data){
+					    alert("success");
+					}, 
+				    error: function(data){
+					    alert(url+"\nerror");
+					}
+				});*/
+				
+				/*$.soap({
 					url: url,
-					method: "QueryPatient",
 			
 					appendMethodToURL: false,
 					SOAPAction: "action",
@@ -162,16 +169,17 @@
 						$('#request').text(SOAPRequest);
 					},
 					success: function(SOAPResponse) {
-						//alert(SOAPResponse.toString());
+						alert(SOAPResponse.toString());
 						$('#feedbackHeader').html('Success!');
 						$('#feedback').text(SOAPResponse.toString());
 						OnGetMemberSuccess(SOAPResponse);
 					},
 					error: function(SOAPResponse) {
+						alert("Error");
 						$('#feedbackHeader').html('Error!');
 						$('#feedback').text(SOAPResponse.toString());
 					}
-				});
+				});*/
 			}
 			
 			
@@ -413,7 +421,7 @@
 		<table style="width: 100%;height: 100%">
 			<tr>
 				<td style="text-align: center;vertical-align: middle">
-					<input type="hidden" id="refer_url" value="http://nrh.dyndns.org/production/refer_service.php">
+					<input type="hidden" id="refer_url" value="http://164.115.24.113:8082/getPatientProxy?wsdl">
 					<div class="form" style="width: 750px;margin-left: auto;margin-right: auto;">
 						<table class="form" style="width: 100%;">
 							<tr>
@@ -499,30 +507,7 @@
 																			$('#Name').focus();
 																		}
 																	"
-																/><input id="555blnLoadMember" type="button" value=" Get Details "
-																	onclick="
-																		$.post('get_patient2.php',{
-																				hospCode: $('#Hospital').val(),
-																				hospitalNumber: $('#HospitalNumber').val()
-																			},function(data){
-																				alert(data);
-																				if(data!='fail'){
-																					var aaa=data.split('::');
-																					$('#Prefix').val(aaa[0]);
-																					$('#Name').val(aaa[1]+' '+aaa[2]+' '+aaa[3]);
-																					var bd=aaa[4].split('-');
-																					$('#BirthDate').val(bd[2]+'/'+bd[1]+'/'+(parseInt(bd[0])+543));
-																					//$('#Gender').val(aaa[5]);
-																					$('#Telephone').val(aaa[6]);
-																					$('#Email').val(aaa[7]);
-																					$('#BloodGroupABO').val(aaa[8]);
-																					$('#BloodTypeRh').val(aaa[9]);
-																					$('#HospitalNumber').val(aaa[10]);
-																				}
-																			}
-																		)
-																	" 
-																/>
+																/><input id="blnLoadMember" type="button" value=" Get Details " />
 															</td>
 														</tr>
 														<tr style="display: none;">
