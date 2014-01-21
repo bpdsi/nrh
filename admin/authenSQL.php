@@ -7,7 +7,8 @@
 	$query="
 		select	*
 		from	admin
-		where	User='$User'
+		where	User='$User' and
+				status='enable'
 	";
 	$result=mysql_query($query);
 	$row=mysql_fetch_array($result);

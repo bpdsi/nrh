@@ -505,9 +505,9 @@
 																				hospCode: $('#Hospital').val(),
 																				hospitalNumber: $('#HospitalNumber').val()
 																			},function(data){
-																				alert(data);
-																				if(data!='fail'){
-																					var aaa=data.split('::');
+																				//alert(data);
+																				var aaa=data.split('::');
+																				if(aaa[1]!=''){
 																					$('#Prefix').val(aaa[0]);
 																					$('#Name').val(aaa[1]+' '+aaa[2]+' '+aaa[3]);
 																					var bd=aaa[4].split('-');
@@ -518,6 +518,8 @@
 																					$('#BloodGroupABO').val(aaa[8]);
 																					$('#BloodTypeRh').val(aaa[9]);
 																					$('#HospitalNumber').val(aaa[10]);
+																				}else{
+																					alert('ไม่พบข้อมูลผู้ป่วย');
 																				}
 																			}
 																		)
