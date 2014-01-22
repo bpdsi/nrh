@@ -89,7 +89,74 @@
 										<form id="editForm" method="post" action="registerSQL.php">
 											<table style="width: 400px;">
 												<tr>
-													<td colspan="2" style="font-weight: bold;">
+													<td class="form_field">โรงพยาบาล</td>
+													<td class="form_input">
+														<input type="hidden" id="edit_hospcode" name="hospcode"
+															style="
+																float: left;
+																width: 50px;
+																text-align: center;
+																padding: 1px;
+																background-color: #eee;
+																border: 1px #aaa solid;
+															" 
+														><div id="edit_HospitalName" style="float: left;margin-top: 3px;"></div><input type="button" id="edit_hospitalBrowseButton" value=" ค้นหา " style="float: left;height: 20px;margin: 0px;padding: 0px;"
+															onclick="
+																$.get('hospitalList.php',{},function(data){
+																		$('#edit_hospitalListDetail').html(data);
+																		$('#edit_hospitalListFrame').css('top',$('#edit_hospitalBrowseButton').position().top);
+																		$('#edit_hospitalListFrame').css('left',$('#edit_hospitalBrowseButton').position().left+1);
+																		$('#edit_hospitalListFrame').fadeIn();
+																	}
+																);
+															"
+														>
+														<div id="edit_hospitalListFrame" class="frame"
+															style="
+																display: none;
+																position: absolute;
+																z-index: 1000;
+																width: 300px;
+															"
+														>
+															<table style="width: 300px;">
+																<tr>
+																	<td style="height: 20px;" class="frame_header">
+																		<div style="float: left">:: กรุณาเลือกโรงพยาบาล</div>
+																		<img src="../img/close.png"
+																			onclick="$('#edit_hospitalListFrame').fadeOut();"
+																			style="
+																				padding: 2px;
+																				float: right;
+																				cursor: pointer;
+																			"
+																		>
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		คำค้น <input type="text" id="edit_keyword" name="keyword" style="width: 240px;"
+																			onkeyup="
+																				$.get('hospitalList.php',{
+																						keyword: $('#edit_keyword').val()
+																					},function(data){
+																						$('#edit_hospitalListDetail').html(data);
+																						$('#edit_hospitalListFrame').css('top',$('#edit_hospitalBrowseButton').position().top);
+																						$('#edit_hospitalListFrame').css('left',$('#edit_hospitalBrowseButton').position().left+1);
+																						$('#edit_hospitalListFrame').fadeIn();
+																					}
+																				);
+																			"
+																		>
+																		<div id="edit_hospitalListDetail" style="width: 100%;height: 200px;overflow: auto"></div>
+																	</td>
+																</tr>
+															</table>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2" style="font-weight: bold;padding-top: 10px;">
 														ข้อมูลประวัติผู้ใช้ระบบ
 													</td>
 												</tr>
@@ -152,6 +219,15 @@
 												<tr>
 													<td class="form_field">วันที่สมัคร</td>
 													<td class="form_input" id="ConfirmDate"></td>
+												</tr>
+												<tr>
+													<td class="form_field">ตำแหน่ง</td>
+													<td class="form_input">
+														<select id="permission" name="permission">
+															<option value="officer">เจ้าหน้าที่ลงทะเบียนผู้ขอใช้สิทธิ์</option>
+															<option value="admin">ผู้ดูแลระบบ (ประจำโรงพยาบาล)</option>
+														</select>
+													</td>
 												</tr>
 											</table>
 										</form>
@@ -245,8 +321,21 @@
 		$i=0;
 		while($i<$numrows){
 			$row=mysql_fetch_array($result);
+			
+			$queryHos="
+				select	*
+				from	admin_hospital
+				where	AdminID='$row[AdminID]'
+			";
+			$resultHos=mysql_query($queryHos);
+			$rowHos=mysql_fetch_array($resultHos);
+			$HospitalName=HospitalName($rowHos[hospcode]);
+			
+			if($row[permission]=='admin'){
+				$bgColor='#FFE4E4';
+			}
 			?>
-				<tr id="AdminID<?php echo $row[AdminID]?>">
+				<tr id="AdminID<?php echo $row[AdminID]?>" style="background-color: <?php echo $bgColor;?>">
 					<td class="bottom_dashed right_solid" 
 						style="
 							vertical-align: middle;
@@ -276,6 +365,10 @@
 							$('#BirthDate').val('<?php echo $birthTemp[2]."/".$birthTemp[1]."/".($birthTemp[0]+543)?>');
 							$('#ConfirmDate').html('<?php echo dateEncode($row[ConfirmDate])?>');
 							$('#User').val('<?php echo $row[User]?>');
+							$('#permission').val('<?php echo $row[permission]?>');
+							
+							$('#edit_hospcode').val('<?php echo $rowHos[hospcode]?>');
+							$('#edit_HospitalName').html('<?php echo $HospitalName?> &nbsp;&nbsp;&nbsp;&nbsp;');
 						"
 					><img src="img/edit.png" height="15"></td>
 					<td class="table_detail right_solid bottom_dashed"><?php echo $row[User]?></td>
