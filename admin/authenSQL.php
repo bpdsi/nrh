@@ -17,6 +17,18 @@
 	}else{
 		$_SESSION["admin_User"]=$row[User];
 		$_SESSION["admin_Password"]=$row[Password];
+		$_SESSION["admin_permission"]=$row[permission];
+		
+		$queryHos="
+			select	*
+			from	admin_hospital
+			where	AdminID='$row[AdminID]'
+		";
+		$resultHos=mysql_query($queryHos);
+		$rowHos=mysql_fetch_array($resultHos);
+		
+		$_SESSION["admin_hospcode"]=$rowHos[hospcode];
+		
 		$_SESSION["admin_Person"]=$row;
 		header("location:../admin");
 	}

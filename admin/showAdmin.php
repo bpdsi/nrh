@@ -100,17 +100,21 @@
 																background-color: #eee;
 																border: 1px #aaa solid;
 															" 
-														><div id="edit_HospitalName" style="float: left;margin-top: 3px;"></div><input type="button" id="edit_hospitalBrowseButton" value=" ค้นหา " style="float: left;height: 20px;margin: 0px;padding: 0px;"
-															onclick="
-																$.get('hospitalList.php',{},function(data){
-																		$('#edit_hospitalListDetail').html(data);
-																		$('#edit_hospitalListFrame').css('top',$('#edit_hospitalBrowseButton').position().top);
-																		$('#edit_hospitalListFrame').css('left',$('#edit_hospitalBrowseButton').position().left+1);
-																		$('#edit_hospitalListFrame').fadeIn();
-																	}
-																);
-															"
-														>
+														><div id="edit_HospitalName" style="float: left;margin-top: 3px;"></div><?php
+															if($_SESSION["admin_permission"]=="global"){
+																?><input type="button" id="edit_hospitalBrowseButton" value=" ค้นหา " style="float: left;height: 20px;margin: 0px;padding: 0px;"
+																	onclick="
+																		$.get('hospitalList.php',{},function(data){
+																				$('#edit_hospitalListDetail').html(data);
+																				$('#edit_hospitalListFrame').css('top',$('#edit_hospitalBrowseButton').position().top);
+																				$('#edit_hospitalListFrame').css('left',$('#edit_hospitalBrowseButton').position().left+1);
+																				$('#edit_hospitalListFrame').fadeIn();
+																			}
+																		);
+																	"
+																><?php
+															} 
+														?>
 														<div id="edit_hospitalListFrame" class="frame"
 															style="
 																display: none;
@@ -163,22 +167,18 @@
 												<tr>
 													<td class="form_field">หมายเลขบัตรประชาชน</td>
 													<td class="form_input">
-														<script type="text/javascript">
-															function checkCitizenID(){
-																$.post('personCheck.php',{
-																		CitizenID: $('#CitizenID').val()
-																	},function(data){
-																		if(data!='notFound'){
-																			alert('กรุณาใช้บัญชี Personal Health Databank ในการเข้าใช้งานระบบ');
-																			$('#CitizenID').focus();
-																		}
-																	}
-																);
-															}
-														</script>
 														<input type="hidden" class="nextFocus" next="AdminID" name="AdminID" id="AdminID"/>
 														<input type="text" class="nextFocus" next="Prefix" name="CitizenID" id="CitizenID"
-															onblur="checkCitizenID();"
+															onblur="
+																$.post('citizenIDCheck.php',{
+																		CitizenID: $(this).val(),
+																		checkingType: 'edit',
+																		AdminID: $('#AdminID').val()
+																	},function(data){
+																		alert(data);
+																	}
+																);
+															"
 														/>
 													</td>
 												</tr>
@@ -333,6 +333,8 @@
 			
 			if($row[permission]=='admin'){
 				$bgColor='#FFE4E4';
+			}else if($row[permission]=='officer'){
+				$bgColor='#FFF';
 			}
 			?>
 				<tr id="AdminID<?php echo $row[AdminID]?>" style="background-color: <?php echo $bgColor;?>">

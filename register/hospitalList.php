@@ -16,6 +16,7 @@
 							style="
 								padding: 3px 0px 3px 10px;
 								font-size: 14px;
+								text-align: left;
 							"
 							onclick="
 								$('#Hospital').val('<?php echo $key?>');

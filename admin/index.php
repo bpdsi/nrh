@@ -28,6 +28,14 @@
 			$('#menu_patientRegist').click(function(){
 				window.open('../register','_self');
 			});
+
+			$('#menu_userProfile').click(function(){
+				alert('Under Construction');
+			});
+			$('#menu_changePassword').click(function(){
+				alert('Under Construction');
+			});
+			
 		});
 	})
 </script>
@@ -61,14 +69,32 @@
 				<tr>
 					<td id="menu_patientRegist" class="mainMenu_item">ลงทะเบียนขอใช้สิทธิ์</td>
 				</tr>
+				<?php
+					if($_SESSION["admin_permission"]=="admin" || $_SESSION["admin_permission"]=="global"){
+						?>
+							<tr>
+								<td id="menu_administrator" class="mainMenu_item">เจ้าหน้าที่</td>
+							</tr>
+							<?php
+								if($_SESSION["admin_permission"]=="global"){
+									?>
+										<tr>
+											<td id="menu_config" class="mainMenu_item">การตั้งค่า</td>
+										</tr>
+									<?php
+								} 
+							?>
+							<tr>
+								<td class="mainMenu_item">Unit</td>
+							</tr>
+						<?php
+					} 
+				?>
 				<tr>
-					<td id="menu_administrator" class="mainMenu_item">เจ้าหน้าที่</td>
+					<td id="menu_userProfile" class="mainMenu_item">แก้ไขข้อมูลส่วนตัว</td>
 				</tr>
 				<tr>
-					<td id="menu_config" class="mainMenu_item">การตั้งค่า</td>
-				</tr>
-				<tr>
-					<td class="mainMenu_item">Unit</td>
+					<td id="menu_changePassword" class="mainMenu_item">เปลี่ยนรหัสผ่าน</td>
 				</tr>
 			</table>
 		</td>
