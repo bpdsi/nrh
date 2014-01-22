@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	include "../function/functionPHP.php";
 	noCache();
 	host("nrh");
