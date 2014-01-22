@@ -8,6 +8,8 @@
 	$Email=$_POST["Email"];
 	$BirthTemp=explode("/", $_POST["BirthDate"]);
 	$BirthDate=($BirthTemp[2]-543)."-".$BirthTemp[1]."-".$BirthTemp[0];
+	$permission=$_POST["permission"];
+	$hospcode=$_POST["hospcode"];
 	
 	
 	$AdminID=$_POST["AdminID"];
@@ -33,7 +35,15 @@
 				FamilyName='$FamilyName',
 				Telephone='$Telephone',
 				Email='$Email',
-				BirthDate='$BirthDate'
+				BirthDate='$BirthDate',
+				permission='$permission'
+		where	AdminID='$AdminID'
+	";
+	$result=mysql_query($query);
+	
+	$query="
+		update	admin_hospital
+		set		hospcode='$hospcode'
 		where	AdminID='$AdminID'
 	";
 	$result=mysql_query($query);

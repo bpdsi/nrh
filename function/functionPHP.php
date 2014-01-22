@@ -206,12 +206,12 @@
 		host("nrh");
 		$query="
 			select	*
-			from	hospital
-			where	HospCode='$HospCode'
+			from	hospcode
+			where	hospcode='$HospCode'
 		";
 		$result=mysql_query($query);
 		$row=mysql_fetch_array($result);
-		return $row[HospitalName];
+		return $row[hosptype].$row[name];
 	}
 	
 	function UniversalTestName($UniversalTestID){

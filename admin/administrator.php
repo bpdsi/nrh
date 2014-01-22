@@ -2,6 +2,8 @@
 	include "../function/functionPHP.php";
 	noCache();
 	host("nrh");
+	
+	$hospcode=$_POST["hospcode"];
 ?>
 <script type="text/javascript">
 	$(function(){
@@ -75,59 +77,122 @@
 										ข้อมูลเจ้าหน้าที่
 									</td>
 									<td style="padding: 0px 10px 0px 10px;">
-										<form id="editForm" method="post" action="registerSQL.php">
-											<table style="width: 400px;">
+										<form id="registForm" method="post" action="registerSQL.php">
+											<table>
 												<tr>
-													<td colspan="2" style="font-weight: bold;">
+													<td class="form_field">โรงพยาบาล</td>
+													<td class="form_input">
+														<input type="hidden" id="regist_hospcode" name="hospcode"
+															style="
+																float: left;
+																width: 50px;
+																text-align: center;
+																padding: 1px;
+																background-color: #eee;
+																border: 1px #aaa solid;
+															" 
+														><div id="HospitalName" style="float: left;margin-top: 3px;"></div><input type="button" id="hospitalBrowseButton" value=" ค้นหา " style="float: left;height: 20px;margin: 0px;padding: 0px;"
+															onclick="
+																$.get('hospitalList.php',{},function(data){
+																		$('#hospitalListDetail').html(data);
+																		$('#hospitalListFrame').css('top',$('#hospitalBrowseButton').position().top);
+																		$('#hospitalListFrame').css('left',$('#hospitalBrowseButton').position().left+1);
+																		$('#hospitalListFrame').fadeIn();
+																	}
+																);
+															"
+														>
+														<div id="hospitalListFrame" class="frame"
+															style="
+																display: none;
+																position: absolute;
+																z-index: 1000;
+																width: 300px;
+															"
+														>
+															<table style="width: 300px;">
+																<tr>
+																	<td style="height: 20px;" class="frame_header">
+																		<div style="float: left">:: กรุณาเลือกโรงพยาบาล</div>
+																		<img src="../img/close.png"
+																			onclick="$('#hospitalListFrame').fadeOut();"
+																			style="
+																				padding: 2px;
+																				float: right;
+																				cursor: pointer;
+																			"
+																		>
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		คำค้น <input type="text" id="keyword" name="keyword" style="width: 240px;"
+																			onkeyup="
+																				$.get('hospitalList.php',{
+																						keyword: $('#keyword').val()
+																					},function(data){
+																						$('#hospitalListDetail').html(data);
+																						$('#hospitalListFrame').css('top',$('#hospitalBrowseButton').position().top);
+																						$('#hospitalListFrame').css('left',$('#hospitalBrowseButton').position().left+1);
+																						$('#hospitalListFrame').fadeIn();
+																					}
+																				);
+																			"
+																		>
+																		<div id="hospitalListDetail" style="width: 100%;height: 200px;overflow: auto"></div>
+																	</td>
+																</tr>
+															</table>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2" style="font-weight: bold;text-align: left;padding-top: 10px;">
 														ข้อมูลประวัติผู้ใช้ระบบ
 													</td>
 												</tr>
 												<tr>
 													<td class="form_field">หมายเลขบัตรประชาชน</td>
 													<td class="form_input">
-														<script type="text/javascript">
-															function checkCitizenID(){
-																$.post('personCheck.php',{
-																		CitizenID: $('#CitizenID').val()
+														<input type="text" class="nextFocus" next="regist_Prefix" name="CitizenID" id="regist_CitizenID"
+															onblur="
+																$.post('citizenIDCheck.php',{
+																		CitizenID: $('#regist_CitizenID').val()
 																	},function(data){
-																		if(data!='notFound'){
-																			alert('กรุณาใช้บัญชี Personal Health Databank ในการเข้าใช้งานระบบ');
-																			$('#CitizenID').focus();
+																		if(data=='found'){
+																			alert('หมายเลขบัตรประชาชนซ้ำ');
+																			$('#regist_CitizenID').focus();
 																		}
 																	}
 																);
-															}
-														</script>
-														<input type="hidden" class="nextFocus" next="AdminID" name="AdminID" id="AdminID"/>
-														<input type="text" class="nextFocus" next="Prefix" name="CitizenID" id="CitizenID"
-															onblur="checkCitizenID();"
+															"
 														/>
 													</td>
 												</tr>
 												<tr>
 													<td class="form_field">คำนำหน้าชื่อ</td>
 													<td class="form_input">
-														<input type="text" class="nextFocus" next="Name" name="Prefix" id="Prefix" style="width: 30px;text-align: left;">
+														<input type="text" class="nextFocus" next="regist_Name" name="Prefix" id="regist_Prefix" style="width: 30px;text-align: left;">
 													</td>
 												</tr>
 												<tr>
 													<td class="form_field">ชื่อ นามสกุล</td>
 													<td class="form_input">
-														<input type="text" class="nextFocus" next="Telephone" name="Name" id="Name">
+														<input type="text" class="nextFocus" next="regist_Telephone" name="Name" id="regist_Name">
 													</td>
 												</tr>
 												<tr>
 													<td class="form_field">หมายเลขโทรศัพท์</td>
-													<td class="form_input"><input type="text" class="nextFocus" next="Email" name="Telephone" id="Telephone"></td>
+													<td class="form_input"><input type="text" class="nextFocus" next="regist_Email" name="Telephone" id="regist_Telephone"></td>
 												</tr>
 												<tr>
 													<td class="form_field">อีเมล์</td>
-													<td class="form_input"><input type="text" class="nextFocus" next="BloodGroupABO" name="Email" id="Email"></td>
+													<td class="form_input"><input type="text" class="nextFocus" next="regist_BloodGroupABO" name="Email" id="regist_Email"></td>
 												</tr>
 												<tr>
 													<td class="form_field">วันเดือนปีเกิด</td>
 													<td class="form_input">
-														<input type="text" class="nextFocus date-pick" next="User" name="BirthDate" id="BirthDate" size="10"
+														<input type="text" class="nextFocus date-pick" next="regist_User" name="BirthDate" id="regist_BirthDate" size="10"
 														><img src="<?php echo $mainUrl?>/img/calendar.png"
 															style="
 																margin-bottom: -3px;
@@ -136,6 +201,50 @@
 															"
 															onclick="$('#BirthDate').focus();"
 														>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2" style="font-weight: bold;padding-top: 10px;text-align: left">
+														บัญชีผู้ใช้ (เจ้าหน้าที่)
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">ชื่อผู้ใช้</td>
+													<td class="form_input">
+														<input type="text" class="nextFocus" next="regist_PasswordN" name="User" id="regist_User"
+															onblur="
+																$.post('userCheck.php',{
+																		User: $('#regist_User').val()
+																	},function(data){
+																		if(data=='found'){
+																			alert('ชื่อผู้ใช้ซ้ำ');
+																			$('#regist_User').focus();
+																		}
+																	}
+																);
+															"
+														>
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">รหัสผ่าน</td>
+													<td class="form_input">
+														<input type="password" class="nextFocus" next="regist_PasswordC" name="PasswordN" id="regist_PasswordN">
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">ยืนยันรหัสผ่าน</td>
+													<td class="form_input">
+														<input type="password" class="nextFocus" next="regist_submitButton" name="PasswordC" id="regist_PasswordC">
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">ตำแหน่ง</td>
+													<td class="form_input">
+														<select id="regist_permission" name="permission">
+															<option value="officer">เจ้าหน้าที่ลงทะเบียนผู้ขอใช้สิทธิ์</option>
+															<option value="admin">ผู้ดูแลระบบ (ประจำโรงพยาบาล)</option>
+														</select>
 													</td>
 												</tr>
 											</table>
@@ -165,35 +274,49 @@
 							>
 							<input id="submitButton" class="nprButton" type='submit' value="   บันทึก   "
 								onclick="
-									var	CitizenID=$('#CitizenID').val();
-									var	Prefix=$('#Prefix').val();
-									var	Name=$('#Name').val();
-									var	Telephone=$('#Telephone').val();
-									var	Email=$('#Email').val();
-									var	Password=$('#Password').val();
-									
-									if(CitizenID==''){
+									var	CitizenID=$('#regist_CitizenID').val();
+									var	Prefix=$('#regist_Prefix').val();
+									var	Name=$('#regist_Name').val();
+									var	Telephone=$('#regist_Telephone').val();
+									var	Email=$('#regist_Email').val();
+									var	User=$('#regist_User').val();
+									var	PasswordN=$('#regist_PasswordN').val();
+									var	PasswordC=$('#regist_PasswordC').val();
+									var hospcode=$('#regist_hospcode').val();
+
+									if(hospcode==''){
+										alert('กรุณาเลือกโรงพยาบาล');
+										$('#hospitalBrowseButton').click();
+									}else if(CitizenID==''){
 										alert('กรุณาระบุ CitizenID');
-										$('#CitizenID').focus();
+										$('#regist_CitizenID').focus();
 									}else if(Name==''){
 										alert('กรุณากรอก ชื่อ-นามสกุล');
-										$('#Name').focus();
+										$('#regist_Name').focus();
 									}else if(Telephone==''){
 										alert('กรุณากรอกหมายเลขโทรศัพท์');
-										$('#Telephone').focus();
+										$('#regist_Telephone').focus();
 									}else if(Email==''){
 										alert('กรุณากรอก อีเมล์');
-										$('#Email').focus();
+										$('#regist_Email').focus();
+									}else if(PasswordN==''){
+										alert('กรุณากรอก รหัสผ่าน');
+										$('#regist_PasswordN').focus();
+									}else if(PasswordN!=PasswordC){
+										alert('ยืนยันรหัสผ่านไม่ถูกต้อง');
+										$('#regist_PasswordC').focus();
 									}else{
-										$.post('adminEdit.php',
-												$('#editForm').serialize()
+										$.post('adminRegist.php',
+												$('#registForm').serialize()
 											,function(data){
-												$.post('showAdmin.php',{
-														hospcode: '<?php echo $_POST["hospcode"]?>'
-													},function(data){
-														$('#contentTD').html(data);
-													}
-												);
+												if(data=='complete'){
+													$.post('administrator.php',{
+															hospcode: $('#regist_hospcode').val()
+														},function(data){
+															$('#container').html(data);
+														}
+													);
+												}
 											}
 										);
 									}
@@ -240,7 +363,13 @@
 					while($i<$numrows){
 						$row=mysql_fetch_array($result);
 						?>
-							<option value="<?php echo $row[hospcode]?>"><?php echo $row[hosptype].$row[name]?></option>
+							<option value="<?php echo $row[hospcode]?>"
+								<?php
+									if($row[hospcode]==$hospcode){
+										echo "selected";
+									} 
+								?>
+							><?php echo $row[hosptype].$row[name]?></option>
 						<?php
 						$i++;
 					} 
@@ -258,3 +387,17 @@
 		<td id="contentTD"></td>
 	</tr>
 </table>
+<?php
+	if($hospcode!=""){
+		?>
+			<script type="text/javascript">
+				$.post('showAdmin.php',{
+						hospcode: '<?php echo $hospcode?>'
+					},function(data){
+						$('#contentTD').html(data);
+					}
+				)
+			</script>
+		<?php
+	} 
+?>
