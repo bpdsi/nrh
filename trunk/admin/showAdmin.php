@@ -86,7 +86,7 @@
 										ข้อมูลเจ้าหน้าที่
 									</td>
 									<td style="padding: 0px 10px 0px 10px;">
-										<form id="registForm" method="post" action="registerSQL.php">
+										<form id="editForm" method="post" action="registerSQL.php">
 											<table style="width: 400px;">
 												<tr>
 													<td colspan="2" style="font-weight: bold;">
@@ -109,6 +109,7 @@
 																);
 															}
 														</script>
+														<input type="hidden" class="nextFocus" next="AdminID" name="AdminID" id="AdminID"/>
 														<input type="text" class="nextFocus" next="Prefix" name="CitizenID" id="CitizenID"
 															onblur="checkCitizenID();"
 														/>
@@ -150,40 +151,7 @@
 												</tr>
 												<tr>
 													<td class="form_field">วันที่สมัคร</td>
-													<td class="form_input">
-														<input type='hidden' id="AllowDate" name='AllowDate' size="10" readonly
-															value="<?php echo date("d/m/").(date("Y")+543)?>";
-														><?php
-															echo date("d");
-															echo " ";
-															echo monNameTH(date("m"));
-															echo " ";
-															echo date("Y")+543;
-														?>
-													</td>
-												</tr>
-												<tr>
-													<td colspan="2" style="font-weight: bold;padding-top: 10px;">
-														บัญชีผู้ใช้ระบบสมุดพกวัคซีน
-													</td>
-												</tr>
-												<tr>
-													<td class="form_field">ชื่อผู้ใช้</td>
-													<td class="form_input">
-														<input type="text" class="nextFocus" next="PasswordN" name="User" id="User">
-													</td>
-												</tr>
-												<tr>
-													<td class="form_field">รหัสผ่าน</td>
-													<td class="form_input">
-														<input type="password" class="nextFocus" next="PasswordC" name="PasswordN" id="PasswordN">
-													</td>
-												</tr>
-												<tr>
-													<td class="form_field">ยืนยันรหัสผ่าน</td>
-													<td class="form_input">
-														<input type="password" class="nextFocus" next="submitButton" name="PasswordC" id="PasswordC">
-													</td>
+													<td class="form_input" id="ConfirmDate"></td>
 												</tr>
 											</table>
 										</form>
@@ -218,10 +186,6 @@
 									var	Telephone=$('#Telephone').val();
 									var	Email=$('#Email').val();
 									var	Password=$('#Password').val();
-			
-									var	User=$('#User').val();
-									var	PasswordN=$('#PasswordN').val();
-									var	PasswordC=$('#PasswordC').val();
 									
 									if(CitizenID==''){
 										alert('กรุณาระบุ CitizenID');
@@ -235,17 +199,18 @@
 									}else if(Email==''){
 										alert('กรุณากรอก อีเมล์');
 										$('#Email').focus();
-									}else if(User==''){
-										alert('กรุณากรอก User');
-										$('#User').focus();
-									}else if(PasswordN==''){
-										alert('กรุณากรอกรหัสผ่าน');
-										$('#PasswordN').focus();
-									}else if(PasswordN!=PasswordC){
-										alert('ยืนยันรหัสผ่านผิดพลาด');
-										$('#PasswordC').focus();
 									}else{
-										$('#registForm').submit();
+										$.post('adminEdit.php',
+												$('#editForm').serialize()
+											,function(data){
+												$.post('showAdmin.php',{
+														hospcode: '<?php echo $_POST["hospcode"]?>'
+													},function(data){
+														$('#contentTD').html(data);
+													}
+												);
+											}
+										);
 									}
 								"
 							>
@@ -292,6 +257,25 @@
 						"
 						onclick="
 							$('#adminEditDIV').fadeIn();
+							$('#AdminID').val('<?php echo $row[AdminID]?>');
+							$('#CitizenID').val('<?php echo $row[CitizenID]?>');
+							$('#Prefix').val('<?php echo $row[Prefix]?>');
+							<?php
+								if($row[MiddleName]==""){
+									?>$('#Name').val('<?php echo $row[GivenName]." ".$row[FamilyName]?>');<?php
+								}else{
+									?>$('#Name').val('<?php echo $row[GivenName]." ".$row[MiddleName]." ".$row[FamilyName]?>');<?php
+								}
+							?>
+							
+							$('#Telephone').val('<?php echo $row[Telephone]?>');
+							$('#Email').val('<?php echo $row[Email]?>');
+							<?php
+								$birthTemp=explode("-", $row[BirthDate]); 
+							?>
+							$('#BirthDate').val('<?php echo $birthTemp[2]."/".$birthTemp[1]."/".($birthTemp[0]+543)?>');
+							$('#ConfirmDate').html('<?php echo dateEncode($row[ConfirmDate])?>');
+							$('#User').val('<?php echo $row[User]?>');
 						"
 					><img src="img/edit.png" height="15"></td>
 					<td class="table_detail right_solid bottom_dashed"><?php echo $row[User]?></td>
