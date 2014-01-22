@@ -312,6 +312,6 @@
 		} 
 	?>
 	<tr>
-		<td class="table_footer" colspan="5" style="text-align: right"><?php echo $numrows?> รายชื่อ</td>
+		<td class="table_footer" colspan="7" style="text-align: right"><?php echo $numrows?> รายชื่อ</td>
 	</tr>
 </table>
