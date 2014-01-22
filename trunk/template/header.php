@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	$permission=$_SESSION["admin_permission"];
 	include "../function/functionPHP.php";
 	noCache();
 	$authen=patientAuthenticated();
@@ -214,7 +215,14 @@
 						<div class="functionName"><?php echo $functionName;?></div>
 						<?php
 							if($functionName=="Administrator"){
-								?><div>Welcome <?php echo $_SESSION["admin_Person"]["PersonName"]?> [Administrator] <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
+								if($permission=="admin"){
+									$permissionName="ผู้ดูแลระบบโรงพยาบาล";
+								}else if($permission=="officer"){
+									$permissionName="เจ้าหน้าที่ลงทะเบียนผู้ขอใช้สิทธิ์";
+								}else if($permission=="global"){
+									$permissionName="ผู้ดูแลระบบ";
+								}
+								?><div>Welcome <?php echo $_SESSION["admin_Person"]["PersonName"]?> [<?php echo $permissionName?>] <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php
 							}else{
 								if($authen=="person"){
 									?><div>Welcome <?php echo $_SESSION["sess_Person"]["PersonName"]?> <input class="menu_logout" type="button" value="  ออกจากระบบ  "></div><?php

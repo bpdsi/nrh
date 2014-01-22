@@ -13,4 +13,6 @@
 	unset($_SESSION["admin_User"]);
 	unset($_SESSION["admin_Password"]);
 	unset($_SESSION["admin_Person"]);
+	unset($_SESSION["admin_hospcode"]);
+	unset($_SESSION["admin_permission"]);
 	header("location:../admin");

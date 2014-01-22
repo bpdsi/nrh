@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	include "../function/functionPHP.php";
 	noCache();
 	host("nrh");
@@ -82,7 +83,7 @@
 												<tr>
 													<td class="form_field">โรงพยาบาล</td>
 													<td class="form_input">
-														<input type="hidden" id="regist_hospcode" name="hospcode"
+														<input type="hidden" id="regist_hospcode" name="hospcode" value="<?php echo $_SESSION["admin_hospcode"]?>"
 															style="
 																float: left;
 																width: 50px;
@@ -91,17 +92,25 @@
 																background-color: #eee;
 																border: 1px #aaa solid;
 															" 
-														><div id="HospitalName" style="float: left;margin-top: 3px;"></div><input type="button" id="hospitalBrowseButton" value=" ค้นหา " style="float: left;height: 20px;margin: 0px;padding: 0px;"
-															onclick="
-																$.get('hospitalList.php',{},function(data){
-																		$('#hospitalListDetail').html(data);
-																		$('#hospitalListFrame').css('top',$('#hospitalBrowseButton').position().top);
-																		$('#hospitalListFrame').css('left',$('#hospitalBrowseButton').position().left+1);
-																		$('#hospitalListFrame').fadeIn();
-																	}
-																);
-															"
-														>
+														><div id="HospitalName" style="float: left;margin-top: 3px;"><?php
+															if($_SESSION["admin_permission"]!="global"){
+																echo HospitalName($_SESSION["admin_hospcode"]);
+															} 
+														?></div><?php
+															if($_SESSION["admin_permission"]=="global"){
+																?><input type="button" id="hospitalBrowseButton" value=" ค้นหา " style="float: left;height: 20px;margin: 0px;padding: 0px;"
+																	onclick="
+																		$.get('hospitalList.php',{},function(data){
+																				$('#hospitalListDetail').html(data);
+																				$('#hospitalListFrame').css('top',$('#hospitalBrowseButton').position().top);
+																				$('#hospitalListFrame').css('left',$('#hospitalBrowseButton').position().left+1);
+																				$('#hospitalListFrame').fadeIn();
+																			}
+																		);
+																	"
+																><?php
+															} 
+														?>
 														<div id="hospitalListFrame" class="frame"
 															style="
 																display: none;
@@ -345,18 +354,27 @@
 			>
 				<option value="">กรุณาเลือกโรงพยาบาล</option>
 				<?php
-					$query="
-						select	*
-						from	hospcode
-						where	(
-									hosptype='โรงพยาบาล' or
-									hosptype='รพ.'
-								) and
-								hospcode in (
-									select	hospcode
-									from	admin_hospital
-								)
-					";
+					if($_SESSION["admin_permission"]=="admin"){
+						$query="
+							select	*
+							from	hospcode
+							where	hospcode='".$_SESSION["admin_hospcode"]."'
+						";
+					}else{
+						$query="
+							select	*
+							from	hospcode
+							where	(
+										hosptype='โรงพยาบาล' or
+										hosptype='รพ.'
+									) and
+									hospcode in (
+										select	hospcode
+										from	admin_hospital
+									)
+						";
+					}
+					
 					$result=mysql_query($query);
 					$numrows=mysql_num_rows($result);
 					$i=0;

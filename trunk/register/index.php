@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	include "../config/connection.php";
 	include "../function/functionPHP.php";
 	$mainUrl=get_cfgValue("mainUrl");
@@ -16,6 +17,8 @@
 		<?php
 		exit();
 	}
+	
+	$Hospital=$_SESSION["admin_hospcode"];
 	if($Hospital==""){
 		$Hospital=11470;
 	}
@@ -441,7 +444,7 @@
 														<tr>
 															<td class="form_field">โรงพยาบาล</td>
 															<td class="form_input">
-																<input type="text" id="Hospital" name="Hospital" value="<?php echo $Hospital?>"
+																<input type="text" id="Hospital" name="Hospital" value="<?php echo $Hospital?>" readonly
 																	style="
 																		float: left;
 																		width: 50px;
@@ -460,17 +463,21 @@
 																	"
 			
 																	readonly
-																><input type="button" id="hospitalBrowseButton" value="ค้นหา" style="float: left;height: 20px;margin: 0px;padding: 0px;"
-																	onclick="
-																		$.get('hospitalList.php',{},function(data){
-																				$('#hospitalListDetail').html(data);
-																				$('#hospitalListFrame').css('top',$('#hospitalBrowseButton').position().top);
-																				$('#hospitalListFrame').css('left',$('#hospitalBrowseButton').position().left+1);
-																				$('#hospitalListFrame').fadeIn();
-																			}
-																		);
-																	"
-																>
+																><?php
+																	if($_SESSION["admin_permission"]=="global"){
+																		?><input type="button" id="hospitalBrowseButton" value="ค้นหา" style="float: left;height: 20px;margin: 0px;padding: 0px;"
+																			onclick="
+																				$.get('hospitalList.php',{},function(data){
+																						$('#hospitalListDetail').html(data);
+																						$('#hospitalListFrame').css('top',$('#hospitalBrowseButton').position().top);
+																						$('#hospitalListFrame').css('left',$('#hospitalBrowseButton').position().left+1);
+																						$('#hospitalListFrame').fadeIn();
+																					}
+																				);
+																			"
+																		><?php
+																	} 
+																?>
 															</td>
 														</tr>
 														<tr>

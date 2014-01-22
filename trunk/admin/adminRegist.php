@@ -10,7 +10,7 @@
 	$BirthTemp=explode("/", $_POST["BirthDate"]);
 	$BirthDate=($BirthTemp[2]-543)."-".$BirthTemp[1]."-".$BirthTemp[0];
 	$User=$_POST["User"];
-	$Password=$_POST["Password"];
+	$Password=$_POST["PasswordN"];
 	$permission=$_POST["permission"];
 	
 	$NameTemp=explode(" ", $PersonName);
@@ -61,7 +61,7 @@
 				'$Email',
 				'$BirthDate',
 				'$User',
-				'$Password',
+				'".aesEncrypt($Password)."',
 				'$permission',
 				CURRENT_TIMESTAMP
 			)
