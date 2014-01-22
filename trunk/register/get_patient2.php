@@ -1,14 +1,18 @@
 <?php
 	include "../function/functionPHP.php";
-	headerEncode();
+	//headerEncode();
 	noCache();
 	$hospCode=$_POST["hospCode"];
 	$hospitalNumber=$_POST["hospitalNumber"];
+	
 	function getPatient($hospCode, $hospitalNumber){
 		require_once('../lib/nusoap.php');
 		$endpoint = "http://164.115.24.113:8082/getPatientProxy/";
 		$wsdl = $myNamespace;
 		$client = new nusoap_client($endpoint, false);
+		$client->soap_defencoding = 'UTF-8';
+		$client->decode_utf8 = false;
+
 		$err = $client->getError();
 		if ($err) {
 		 echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
@@ -17,6 +21,8 @@
 	
 		$msg='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.nhis.nectec.or.th"><soapenv:Header/><soapenv:Body><ws:getInfo><RequestPatient><hospCode>'.$hospCode.'</hospCode><hospitalNumber>'.$hospitalNumber.'</hospitalNumber></RequestPatient></ws:getInfo></soapenv:Body></soapenv:Envelope>';
 		$result=$client->send($msg, $endpoint);
+		
+		//echo mb_detect_encoding($result)."\n";
 		// Check for a fault
 		if ($client->fault) {
 			 return false;
