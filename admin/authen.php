@@ -77,10 +77,6 @@
 													<img src="adminIcon.png" width="100"><br>
 													บุคคลากร
 												</div>
-												<div id="vaccination" style="display: none;">
-													<img src="../images/vcPersonRegister.png" width="100"><br>
-													สมุดพกวัคซีน
-												</div>
 											</td>
 											<td>
 												<form id="authenticationForm" method="post" action="authenSQL.php">
