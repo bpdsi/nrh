@@ -81,10 +81,13 @@
 		<input type="button" value="Print" style="float: right;"
 			onclick="
 				$(this).hide();
+				$('#backButton').hide();
 				window.print();
 				$(this).show();
+				$('#backButton').show();
 			"
 		>
+		<input id="backButton" type="button" value="กลับไปหน้าแรก" onclick="window.open('../admin','_self')" style="float: left;">
 		<table style="width: 500px;margin-left: auto;margin-right: auto;">
 			<tr>
 				<td class="solid">
