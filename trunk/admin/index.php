@@ -22,18 +22,21 @@
 			$('#menu_administrator').click(function(){
 				$.post('administrator.php',function(data){
 					$('#container').html(data);
-				})
+				});
 			});
 
 			$('#menu_patientRegist').click(function(){
 				window.open('../register','_self');
 			});
 
-			$('#menu_userProfile').click(function(){
+			$('#menu_unit').click(function(){
 				alert('Under Construction');
 			});
+
 			$('#menu_changePassword').click(function(){
-				alert('Under Construction');
+				$.post('changePassword.php',function(data){
+					$('#container').html(data);
+				});
 			});
 			
 		});
@@ -41,11 +44,6 @@
 </script>
 
 <style type="text/css">
-	/* Specific Form Rules */
-	#form-demo {width: 330px; margin: 50px 0 100px 0; height: 170px; padding: 25px 10px 0 10px; background: url(images/bg_login.png) no-repeat 0 0;}
-	#confirm {display: none;}
-	.success {order: 1px solid; margin: 0; padding: 10px; text-align: center; color: #4F8A10; background-color: #ebf6d9; border-color: #DFF2BF;}
-	
 	.mainMenu_item{
 		padding: 3px 10px 3px 10px;
 	}
@@ -85,14 +83,11 @@
 								} 
 							?>
 							<tr>
-								<td class="mainMenu_item">Unit</td>
+								<td id="menu_unit" class="mainMenu_item">Unit</td>
 							</tr>
 						<?php
 					} 
 				?>
-				<tr>
-					<td id="menu_userProfile" class="mainMenu_item">แก้ไขข้อมูลส่วนตัว</td>
-				</tr>
 				<tr>
 					<td id="menu_changePassword" class="mainMenu_item">เปลี่ยนรหัสผ่าน</td>
 				</tr>

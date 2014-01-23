@@ -120,6 +120,10 @@
 		return $row[hospitalname];
 	}
 	
+	function staffAuthenticated(){
+		return adminAuthenticated();
+	}
+	
 	function adminAuthenticated(){
 		session_start();
 		host("nrh");
