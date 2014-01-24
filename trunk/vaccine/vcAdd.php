@@ -15,7 +15,7 @@
 	$mi=$_POST["mi"];
 	
 	$table=$_SESSION["sess_vcPrefix"]."_vaccination";
-	$query="
+	echo $query="
 		insert into	$table
 			(
 				vcpID,

@@ -3,6 +3,12 @@
 	$functionName="Vaccination History (ประวัติการรับวัคซีน)";
 	include "../template/header.php";
 
+	if($_SESSION["sess_vcPrefix"]=='vcp'){
+		$personID=$_SESSION["sess_vc_Person"]["vcPersonalID"];
+	}else{
+		$personID=$_SESSION["sess_Person"]["PersonalID"];
+	}	
+
 	$table=$_SESSION["sess_vcPrefix"]."_vaccination";
 	$query="
 		select	left(min(Date_Service),4) as minYear 
@@ -32,7 +38,7 @@
 	$queryVCPerson="
 		select	*
 		from	$table
-		where	parent='$person[PersonalID]'
+		where	parent='$personID'
 	";
 	$resultVCPerson=mysql_query($queryVCPerson);
 	$numrowsVCPerson=mysql_num_rows($resultVCPerson);
@@ -201,7 +207,7 @@
 													$query="
 														select	*
 														from	$table
-														where	parent='$person[PersonalID]'
+														where	parent='$personID'
 													";
 													$result=mysql_query($query);
 													$numrows=mysql_num_rows($result);
@@ -428,7 +434,7 @@
 													$query="
 														select	*
 														from	$table
-														where	parent='$person[PersonalID]'
+														where	parent='$personID'
 													";
 													$result=mysql_query($query);
 													$numrows=mysql_num_rows($result);
@@ -663,7 +669,7 @@
 					$query="
 						select	*
 						from	$table
-						where	parent='$person[PersonalID]'
+						where	parent='$personID'
 					";
 					$result=mysql_query($query);
 					$numrows=mysql_num_rows($result);
