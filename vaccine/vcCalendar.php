@@ -280,7 +280,7 @@
 									<tr>
 										<td class="form_field">โรงพยาบาล</td>
 										<td class="form_input">
-											<input type="text" id="Hospital" name="HospCode" value="<?php echo $Hospital?>"
+											<input type="text" id="Hospital" name="HospCode" value="<?php echo $Hospital?>" readonly
 												style="
 													float: left;
 													width: 50px;
