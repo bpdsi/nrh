@@ -62,6 +62,7 @@
 											,function(data){
 												if(data=='complete'){
 													alert('เปลี่ยนรหัสผ่านเรียบร้อย');
+													$('#container').html('');
 												}
 											}
 										);

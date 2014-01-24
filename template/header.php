@@ -65,6 +65,7 @@
 	<head>
 		<title>Personal Health Databank</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../img/favicon.png" rel="shortcut icon" type="image/vnd.microsoft.icon">
 		<!-- CSS -->
 			<link rel="stylesheet" type="text/css" media="screen" href="../css/npr.css">
 		
