@@ -92,7 +92,11 @@
 						concat(hosptype,name) as hospitalname,
 						refer_url
 			from 		hospcode 
-			where 		hosptype like '%โรงพยาบาล%' and
+			where 		(
+							hosptype like '%โรงพยาบาล%' or
+							hosptype like 'รพ.%' or
+							hosptype like 'รพช.%'
+						) and
 						concat(hosptype,name) like '%$keyword%'
 			order by	hospcode
 		";

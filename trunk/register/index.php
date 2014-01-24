@@ -8,6 +8,7 @@
 			<html>
 				<head>
 					<title>Personal Databank</title>
+					<link href="../img/favicon.png" rel="shortcut icon" type="image/vnd.microsoft.icon">
 					<script type="text/javascript">
 						alert("Permission Denied!");
 						window.open('../authen','_self');

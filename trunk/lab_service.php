@@ -139,7 +139,7 @@
 			from		person left join lab_test on person.PersonalID=lab_test.PersonalID  
 						left join  lab_test_result on lab_test.VisitingNumber=lab_test_result.VisitingNumber
 		".$where."
-			order by	lab_test.VisitingNumber
+			order by	lab_test.LabDate desc
 		";
 		
 		//echo $SqlString;						

@@ -16,6 +16,7 @@
 	<head>
 		<title>Patient Authentication</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../img/favicon.png" rel="shortcut icon" type="image/vnd.microsoft.icon">
 		
 		<!-- jQuery -->		
 			<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
