@@ -2,51 +2,63 @@
 	require_once('./lib/nusoap.php');
 	include "common_soap.php";
 	function checkPateint($PersonalID, $HospCode){
-		$checkPatientx="insert";
-		$sqlCheck="select PersonalID, HospCode from hospital_patient 
-					where PersonalID=$PersonalID and HospCode='$HospCode'";
-		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
-		$rowCheck=mysql_fetch_array($rCheck);
-		if($rowCheck["PersonalID"]!="") $checkPatientx="update";
-		
-		return $checkPatientx;
+		if($PersonalID!="" and $HospCode!=""){
+			$checkPatientx="insert";
+			$sqlCheck="select PersonalID, HospCode from hospital_patient 
+						where PersonalID=$PersonalID and HospCode='$HospCode'";
+			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
+			$rowCheck=mysql_fetch_array($rCheck);
+			if($rowCheck["PersonalID"]!="") $checkPatientx="update";
+			
+			return $checkPatientx;
+		}else{
+			return "update";
+		}
 	}
 	function checkLab($LabID, $LabName, $HospCode){
-		$sqlCheck="select LabCode, LabID, LabName from lab 
-					where LabID='$LabID' and LabName='$LabName' and HospCode='$HospCode'";
-		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
-		$rowCheck=mysql_fetch_array($rCheck);
-		$LabIDx=$rowCheck["LabCode"];
-		if($LabIDx==""){
-			$sqlInsert="insert into lab(LabID, LabName, HospCode) values('$LabID', '$LabName', '$HospCode')";
-			$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
-			
+		if($LabName!=""){
 			$sqlCheck="select LabCode, LabID, LabName from lab 
 						where LabID='$LabID' and LabName='$LabName' and HospCode='$HospCode'";
 			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 			$rowCheck=mysql_fetch_array($rCheck);
-			$LabID=$rowCheck["LabCode"];
-			return $LabIDx;	
+			$LabIDx=$rowCheck["LabCode"];
+			if($LabIDx==""){
+				$sqlInsert="insert into lab(LabID, LabName, HospCode) values('$LabID', '$LabName', '$HospCode')";
+				$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
+				
+				$sqlCheck="select LabCode, LabID, LabName from lab 
+							where LabID='$LabID' and LabName='$LabName' and HospCode='$HospCode'";
+				$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
+				$rowCheck=mysql_fetch_array($rCheck);
+				$LabID=$rowCheck["LabCode"];
+				return $LabIDx;	
+			}else{
+				return $LabIDx;
+			}
 		}else{
-			return $LabIDx;
+			return 0;
 		}
 	}
 	function checkWard($WardName, $HospCode){
-		$sqlCheck="select WardID, WardName from ward where WardName='$WardName' and HospCode='$HospCode'";
-		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
-		$rowCheck=mysql_fetch_array($rCheck);
-		$WardID=$rowCheck["WardID"];
-		if($WardID==""){
-			$sqlInsert="insert into ward(WardName, HospCode) values('$WardName', '$HospCode')";
-			$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
-			
+		if($LabName!=""){
 			$sqlCheck="select WardID, WardName from ward where WardName='$WardName' and HospCode='$HospCode'";
 			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 			$rowCheck=mysql_fetch_array($rCheck);
 			$WardID=$rowCheck["WardID"];
-			return $WardID;	
+			if($WardID==""){
+				$sqlInsert="insert into ward(WardName, HospCode) values('$WardName', '$HospCode')";
+				$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
+				
+				$sqlCheck="select WardID, WardName from ward where WardName='$WardName' and HospCode='$HospCode'";
+				$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
+				$rowCheck=mysql_fetch_array($rCheck);
+				$WardID=$rowCheck["WardID"];
+				return $WardID;	
+			}else{
+				return $WardID;
+			}
 		}else{
-			return $WardID;
+			return 0;
 		}
 	}
 	function checkMethod($MethodName){
@@ -98,29 +110,34 @@
 	}
 	//echo checkUnit("mg/dl");
 	function checkUTest($UniversalTestName,$MethodID, $HospCode){
-		$sqlCheck="select UniversalTestID, UniversalTestName from utest 
-					where UniversalTestName='$UniversalTestName' and HospCode='$HospCode'";
-		if(trim($MethodID)!="")$sqlCheck.=" and MethodID=$MethodID";
-		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
-		$rowCheck=mysql_fetch_array($rCheck);
-		$UniversalTestID=$rowCheck["UniversalTestID"];
-		if($UniversalTestID==""){
-			if(trim($MethodID)!=""){
-				$sqlInsert="insert into utest(UniversalTestName, MethodID, HospCode)values('$UniversalTestName',$MethodID, '$HospCode')";
-			}else{
-					$sqlInsert="insert into utest(UniversalTestName, HospCode)values('$UniversalTestName','$HospCode')";
-			}
-			$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
-			
+		if($UniversalTestName!=""){
 			$sqlCheck="select UniversalTestID, UniversalTestName from utest 
 						where UniversalTestName='$UniversalTestName' and HospCode='$HospCode'";
 			if(trim($MethodID)!="")$sqlCheck.=" and MethodID=$MethodID";
 			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 			$rowCheck=mysql_fetch_array($rCheck);
 			$UniversalTestID=$rowCheck["UniversalTestID"];
-			return $UniversalTestID;	
+			if($UniversalTestID==""){
+				if(trim($MethodID)!=""){
+					$sqlInsert="insert into utest(UniversalTestName, MethodID, HospCode)values('$UniversalTestName',$MethodID, '$HospCode')";
+				}else{
+						$sqlInsert="insert into utest(UniversalTestName, HospCode)values('$UniversalTestName','$HospCode')";
+				}
+				$rInsert=mysql_query($sqlInsert)or die(mysql_error()."<br>".$sqlInsert);
+				
+				$sqlCheck="select UniversalTestID, UniversalTestName from utest 
+							where UniversalTestName='$UniversalTestName' and HospCode='$HospCode'";
+				if(trim($MethodID)!="")$sqlCheck.=" and MethodID=$MethodID";
+				$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
+				$rowCheck=mysql_fetch_array($rCheck);
+				$UniversalTestID=$rowCheck["UniversalTestID"];
+				return $UniversalTestID;	
+			}else{
+				return $UniversalTestID;
+			}
+			
 		}else{
-			return $UniversalTestID;
+			return 0;
 		}
 	}
 	function checkPerson($CitizenID){
@@ -145,11 +162,15 @@
 		return $LabTestIDx;
 	}
 	function checkStaff($CitizenID){
-		$sqlCheck="select StaffID from staff where CitizenID='$CitizenID'";
-		$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
-		$rowCheck=mysql_fetch_array($rCheck);
-		$PersonalID=$rowCheck["StaffID"];
-		return $PersonalID;
+		if($CitizenID!=""){
+			$sqlCheck="select StaffID from staff where CitizenID='$CitizenID'";
+			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
+			$rowCheck=mysql_fetch_array($rCheck);
+			$PersonalID=$rowCheck["StaffID"];
+			return $PersonalID;
+		}else{
+			return 0;
+		}
 	}
 	function InsertLabReport($params) {
 		//var_dump($params);
@@ -314,7 +335,7 @@
 				$sqlInsertlab_test_result="update lab_test_result set VisitingNumber='$VisitingNumber', ResultLab='$ResultLab', UnitCode=$UnitCode, ReferenceResult='$ReferenceResult', ResultUniversal='$ResultUniversal', UnitUniversal=$UnitUniversal, ReferenceUniversalTest='$ReferenceUniversalTest', LabResultDate='$LabResultDate', LabReporter=$LabReporter where LabTestID='$LabTestID' and UniversalTestID=$UniversalTestID and HospCode='$HospCode'";
 			}
 			$universalTestNamex.="<tr><td>Lab Result Detail Manage</td><td>".$sqlInsertlab_test_result."</td></tr>";
-			mysql_query($sqlInsertlab_test_result)or die(mysql_error());
+			mysql_query($sqlInsertlab_test_result)or die(mysql_error()."<br>".$sqlInsertlab_test_result);
 		}
 		
 		$i=0;

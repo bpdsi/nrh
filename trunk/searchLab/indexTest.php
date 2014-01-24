@@ -81,35 +81,13 @@
 						}
 					endwhile;
 
-					$myNamespace = "http://164.115.24.113:8082/getPatientProxy?wsdl";
+					$myNamespace = "http://nrh.dyndns.org/production/lab_service.php?wsdl";
 
-					echo "<pre style='text-align: left;'>";
-					
-					{
-						$client = new nusoap_client($myNamespace,true); 
-				        $params = array(
-		                   'hospCode' => '11470',
-						   'hospitalNumber' => '20/51'
-				        );
-				        $msg='<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.nhis.nectec.or.th"><soapenv:Header/><soapenv:Body><ws:getInfo><RequestPatient><hospCode>11470</hospCode><hospitalNumber>20/51</hospitalNumber></RequestPatient></ws:getInfo></soapenv:Body></soapenv:Envelope>';
-				        $data = $client->send($msg,"http://164.115.24.113:8082/getPatientProxy");
-				        print_r($data);
-					}
-					echo "</pre>";
-					exit();
-					
 					$wsdl =$myNamespace;
-					$soap = new nusoap_client($wsdl,true); 
+					$soap = new nusoap_client($wsdl,"wsdl"); 
 					$proxy = $soap->getProxy();
-					
-					$param=array(
-							'hospCode'=>'11470', 
-							'hospitalNumber'=>'20/51'
-					);
-					
-					$result = $proxy->getInfo($param);
+					$result = $proxy->QueryLab(array('CitizenID'=> trim($person[CitizenID]),'StartDate'=> $StartDate,'EndDate'=> $EndDate));
 					$anm=split(",","HospitalNumber,CitizenID,Gender,GivenName,FamilyName,address,BirthDate,Nationality,Race,MotherName,MotherCID,FatherName,FatherCID,VisitingNumber,LabID,PersonalID,LabDate,Description,ResultLabID,UniversalTestID,ResultLab,UnitID");
-					print_r($result);
 					if($result!=""){
 						?>
 							<table class="noSpacing border_solid" style="width: 100%;">

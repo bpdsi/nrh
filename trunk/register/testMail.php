@@ -43,11 +43,12 @@
 	$mail->IsHTML(true); 
 	$mail->IsSMTP();
 	$mail->SMTPAuth = true; // enable SMTP authentication
-	$mail->Host = get_cfgValue("smtpHost");
-	$mail->Username = get_cfgValue("smtpUsername"); // GMAIL username
-	$mail->Password = get_cfgValue("smtpPassword"); // GMAIL password
-	$mail->FromName = get_cfgValue("smtpFromName");
-	$mail->From = get_cfgValue("smtpFromMail");
+	$mail->Host = "ssl://smtp.gmail.com:587";
+	$mail->Username = "thanaphutBenz@gmail.com"; // GMAIL username
+	$mail->Password = "Benz8157"; // GMAIL password
+	$mail->FromName = "Personal Health Databank";
+	$mail->From = "vasutap@gmail.com";
+
 
 	if(trim($mailTo)!=""){
 		$mailx=$mail;
@@ -55,14 +56,14 @@
 		$mailx->Body = $message;
 		$mailx->AddAddress($mailTo);
 		if(!$mail->Send()) {
-			return "Fail";
+			echo "Fail";
 			$mail->ClearAddresses();
 		}else{
 			$mail->ClearAddresses();
 			$msg="";
 			$message="";
-			return "Success";
+			echo "Success";
 		}
 	}else{
-		return "Fail";
+		echo "Fail";
 	}

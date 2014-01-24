@@ -8,7 +8,6 @@
 	function getPatient($hospCode, $hospitalNumber){
 		require_once('../lib/nusoap.php');
 		$endpoint = "http://164.115.24.113:8082/getPatientProxy/";
-		//$endpoint = "http://61.19.236.196:8081/getPatient";
 		$wsdl = $myNamespace;
 		$client = new nusoap_client($endpoint, false);
 		$client->soap_defencoding = 'UTF-8';
@@ -43,6 +42,5 @@
 		}
 	}
 	$returnValue=getPatient($hospCode,$hospitalNumber);
-
-	echo $returnValue["Patient"]["PersonName"]["Prefix"]."::".$returnValue["Patient"]["PersonName"]["GivenName"]."::".$returnValue["Patient"]["PersonName"]["MiddleName"]."::".$returnValue["Patient"]["PersonName"]["FamilyName"]."::".$returnValue["Patient"]["BirthDate"]."::".$returnValue["Patient"]["Gender"]."::".$returnValue["Patient"]["Telephone"]."::".$returnValue["Patient"]["Email"]."::".$returnValue["Patient"]["BloodGroupABO"]."::".$returnValue["Patient"]["BloodTypeRh"]."::".$returnValue["Patient"]["HospitalNumber"]."::".$returnValue["Patient"]["CitizenID"];
+	echo $returnValue["Patient"]["PersonName"]["Prefix"]."::".$returnValue["Patient"]["PersonName"]["GivenName"]."::".$returnValue["Patient"]["PersonName"]["MiddleName"]."::".$returnValue["Patient"]["PersonName"]["FamilyName"]."::".$returnValue["Patient"]["BirthDate"]."::".$returnValue["Patient"]["Gender"]."::".$returnValue["Patient"]["Telephone"]."::".$returnValue["Patient"]["Email"]."::".$returnValue["Patient"]["BloodGroupABO"]."::".$returnValue["Patient"]["BloodTypeRh"]."::".$returnValue["Patient"]["HospitalNumber"];
 ?>
