@@ -526,6 +526,7 @@
 																					$('#BloodGroupABO').val(aaa[8]);
 																					$('#BloodTypeRh').val(aaa[9]);
 																					$('#HospitalNumber').val(aaa[10]);
+																					$('#CitizenID').val(aaa[11]);
 																				}else{
 																					alert('ไม่พบข้อมูลผู้ป่วย');
 																				}
