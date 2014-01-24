@@ -1,6 +1,12 @@
 <?php
 	session_start();
-	$person=$_SESSION["sess_Person"];
+	
+	if($_SESSION["sess_vcPrefix"]=="vcp"){
+		$person=$_SESSION["sess_vc_Person"]["vcPersonalID"];
+	}else{
+		$person=$_SESSION["sess_Person"];
+	}
+	
 	include "../function/functionPHP.php";
 	noCache();
 	host("nrh");

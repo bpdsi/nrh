@@ -3,7 +3,13 @@
 	include "../function/functionPHP.php";
 	noCache();
 	headerEncode();
-	$person=$_SESSION["sess_Person"];
+	
+	if($_SESSION["sess_vcPrefix"]=='vcp'){
+		$person=$_SESSION["sess_vc_Person"]["vcPersonalID"];
+	}else{
+		$person=$_SESSION["sess_Person"]["PersonalID"];
+	}
+	
 ?>
 <table style="width: 100%;">
 	<tr>
@@ -14,7 +20,7 @@
 				$query="
 					select	*
 					from	$table
-					where	parent='$person[PersonalID]'
+					where	parent='$person'
 				";
 				$result=mysql_query($query);
 				$numrows=mysql_num_rows($result);
