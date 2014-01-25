@@ -13,8 +13,64 @@
 	$result=mysql_query($query);
 	$row=mysql_fetch_array($result);
 	if(mysql_num_rows($result)==0 || aesDecrypt($row[Password])!=$Password){
+	$ownerID=$row[PersonalID];
+		if($ownerID==""){
+			$query="
+				insert into	log_authen_admin
+					(
+						ipAddress,
+						ownerID,
+						user,
+						authenResult,
+						datetime
+					) values (
+						'$_SERVER[REMOTE_ADDR]',
+						NULL,
+						'$User',
+						'fail',
+						CURRENT_TIMESTAMP
+					)
+			";
+			$result=mysql_query($query);
+		}else{
+			$query="
+				insert into	log_authen_admin
+					(
+						ipAddress,
+						ownerID,
+						user,
+						authenResult,
+						datetime
+					) values (
+						'$_SERVER[REMOTE_ADDR]',
+						'$ownerID',
+						'$User',
+						'fail',
+						CURRENT_TIMESTAMP
+					)
+			";
+			$result=mysql_query($query);
+		}
+		
 		header("location:authenFail.php");
 	}else{
+		$query="
+			insert into	log_authen_admin
+				(
+					ipAddress,
+					ownerID,
+					user,
+					authenResult,
+					datetime
+				) values (
+					'$_SERVER[REMOTE_ADDR]',
+					'$row[PersonalID]',
+					'$User',
+					'pass',
+					CURRENT_TIMESTAMP
+				)
+		";
+		$result=mysql_query($query);
 		$_SESSION["admin_User"]=$row[User];
 		$_SESSION["admin_Password"]=$row[Password];
 		$_SESSION["admin_permission"]=$row[permission];

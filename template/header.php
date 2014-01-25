@@ -182,6 +182,25 @@
 		</style>
 	</head>
 	<body>
+		<div id="waitingDIV" 
+			style="
+				display: none;
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				background-image: url('../img/dark60.png');
+				z-index: 1000;
+			"
+		>
+			<table style="width: 100%;height: 100%;">
+				<tr>
+					<td style="vertical-align: middle;text-align: center;font-size:200%;color: #fff;">
+						<img src="../img/loading.gif"><br>
+						กรุณารอสักครู่
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div class="home" 
 			style="
 				width: 1000px;
