@@ -43,7 +43,7 @@
 	$mail->IsHTML(true); 
 	$mail->IsSMTP();
 	$mail->SMTPAuth = true; // enable SMTP authentication
-	$mail->Host = "ssl://smtp.gmail.com:587";
+	$mail->Host = "ssl://smtp.gmail.com:465";
 	$mail->Username = "thanaphutBenz@gmail.com"; // GMAIL username
 	$mail->Password = "Benz8157"; // GMAIL password
 	$mail->FromName = "Personal Health Databank";

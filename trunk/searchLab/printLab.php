@@ -1,6 +1,9 @@
 <?php
 	include "../function/functionPHP.php";
 	host("nrh");
+	if(!patientAuthenticated()){
+		exit();
+	}
 	$VisitingNumber=$_GET["VisitingNumber"];
 	$queryLab="
 		select	*

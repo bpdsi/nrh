@@ -53,145 +53,276 @@
 					</tr>
 				</table>
 			</form>
-
+			
 			<?php
-				require_once('../lib/nusoap.php'); 
+				if($StartDate!=""){
+					$tempDate=explode("/", $StartDate);	
+					$stDate=($tempDate[2]-543)."-".$tempDate[1]."-".$tempDate[0];				
+				}
+				if($EndDate!=""){
+					$tempDate=explode("/", $EndDate);	
+					$enDate=($tempDate[2]-543)."-".$tempDate[1]."-".$tempDate[0];
+				}
+				if($StartDate!=""){
+					if($EndDate!=""){
+						$query="
+							select		*
+							from		lab_test
+							where		PersonalID='$person[PersonalID]' and
+										(
+											left(LabDate,10)>='$stDate' and
+											left(LabDate,10)<='$enDate'
+										)
+							order by	LabDate desc
+						";
+					}else{
+						$query="
+							select		*
+							from		lab_test
+							where		PersonalID='$person[PersonalID]' and
+										(
+											left(LabDate,10)='$stDate'
+										)
+							order by	LabDate desc
+						";
+					}
+				}else{
+					if($endDate!=""){
+						$query="
+							select		*
+							from		lab_test
+							where		PersonalID='$person[PersonalID]' and
+										(
+											left(LabDate,10)='$enDate'
+										)
+							order by	LabDate desc
+						";
+					}else{
+						$query="
+							select		*
+							from		lab_test
+							where		PersonalID='$person[PersonalID]'
+							order by	LabDate desc
+						";
+					}
+				}
 				
-				try {
-					$where="";
-					if($PatientName!=""){
-						$where.=" and concat(GivenName,FamilyName) like '%".$PatientName."%'";
-					}
-					if($PersonIDs!=""){
-						$where.=" and CitizenID like '%".$PersonIDs."%'";
-					}
-					if($hn!=""){
-						$where.=" and HospitalNumber ='".$hn."'";
-					}
-					$sql="SELECT CitizenID  from person where PersonalID<>'' ";
-					$sql.=$where;
-					$result = mysql_query($sql) or die(mysql_error()."<br>".$sql);
-					$personid="";
-					$numrow=mysql_num_rows($result);
-					while($rowcid=mysql_fetch_array($result)):
-						if($personid!=""){
-							$personid.=",".$rowcid[0];
-						}else{
-							$personid=$rowcid[0];
-						}
-					endwhile;
-
-					$myNamespace = "http://nrh.dyndns.org/production/lab_service.php?wsdl";
-
-					$wsdl =$myNamespace;
-					$soap = new nusoap_client($wsdl,"wsdl"); 
-					$proxy = $soap->getProxy();
-					$result = $proxy->QueryLab(array('CitizenID'=> trim($person[CitizenID]),'StartDate'=> $StartDate,'EndDate'=> $EndDate));
-					$anm=split(",","HospitalNumber,CitizenID,Gender,GivenName,FamilyName,address,BirthDate,Nationality,Race,MotherName,MotherCID,FatherName,FatherCID,VisitingNumber,LabID,PersonalID,LabDate,Description,ResultLabID,UniversalTestID,ResultLab,UnitID");
-					if($result!=""){
-						?>
-							<table class="noSpacing border_solid" style="width: 100%;">
+				$result=mysql_query($query);
+				$numrows=mysql_num_rows($result);
+				if($numrows>0){
+					?>
+						<div id="shareDIV"
+							style="
+								position: absolute;
+								display: none;
+							"
+						>
+							<table class="table_01" style="width: 352px;">
 								<tr>
-									<td class="table_header right_solid bottom_solid" rowspan="2">Analyte (Method)</td>
-									<td class="table_header bottom_solid right_solid" colspan="3">Conventional Unit</td>
-									<td class="table_header bottom_solid" colspan="3">SI Unit</td>
+									<td class="table_header" style="padding: 4px;">แบ่งปันผลตรวจจากห้องปฏิบัติการ <img src="../img/close.png" onclick="$('#shareDIV').fadeOut();" style="float: right;cursor: pointer;"></td>
 								</tr>
 								<tr>
-									<td class="table_header right_solid bottom_solid">Result</td>
-									<td class="table_header right_solid bottom_solid">Unit</td>
-									<td class="table_header right_solid bottom_solid">Reference Range</td>
-									<td class="table_header right_solid bottom_solid">Result</td>
-									<td class="table_header right_solid bottom_solid">Unit</td>
-									<td class="table_header bottom_solid">Reference Range</td>
-								</tr>
-								<?php
-									if(is_array($result[item][labOrderDetail])){
-										$labOrderDetail=$result[item][labOrderDetail];
-										$utest=utest($labOrderDetail[UniversalTestID]);
-										if($lastVN!=$result[item][labOrder][VisitingNumber]){
-											$lastVN=$result[item][labOrder][VisitingNumber];
-											$HospCode=$result[item][labOrder][Hospital];
-											?>
+									<td>
+										<form id="shareForm">
+											<input type="hidden" id="LabTestID" name="LabTestID">
+											<input type="hidden" id="PersonalID" name="PersonalID" value="<?php echo $person[PersonalID]?>">
+											<table style="margin-left: auto;margin-right: auto;width: 345px;">
 												<tr>
-													<td class="table_detail bottom_solid" style="background-color: #99C27E">
-														VN : <b><?php echo $lastVN?></b>
-													</td>
-													<td class="table_detail bottom_solid" colspan="3" align="center" style="background-color: #99C27E">
-														<?php echo dateEncode($result[item][labOrder][LabDate])?>
-													</td>
-													<td class="table_detail bottom_solid" colspan="3" style="text-align: right;background-color: #99C27E">
-														<?php echo HospitalName($HospCode)." ($HospCode)"?>
-														<input type="button" value="  Print  " onclick="window.open('printLab.php?VisitingNumber=<?php echo $lastVN;?>')">
+													<td class="form_field" style="font-weight: bold;padding-right:10px;">VN</td>
+													<td id="VN"></td>
+												</tr>
+												<tr>
+													<td class="form_field" style="font-weight: bold;padding-right:10px;">วันเวลา</td>
+													<td id="LabDate"></td>
+												</tr>
+												<tr>
+													<td class="form_field" style="font-weight: bold;padding-right:10px;">โรงพยาบาล</td>
+													<td id="HospitalName"></td>
+												</tr>
+												<tr>
+													<td class="form_field" style="font-weight: bold;padding-right:10px;">สามารถเข้าดูได้</td>
+													<td><input type="text" id="creditAvailable" name="creditAvailable" style="width: 20px;text-align: center"> ครั้ง</td>
+												</tr>
+												<tr>
+													<td class="form_field" style="font-weight: bold;padding-right:10px;">วิธีการแบ่งปัน</td>
+													<td>
+														<select id="shareType" name="shareType"
+															onchange="
+																if($(this).val()=='shareViaEmail'){
+																	$('.showLink').hide();
+																	$('.shareViaEmail').show();
+																}else{
+																	$('.showLink').show();
+																	$('.shareViaEmail').hide();
+																}
+															"
+														>
+															<option value="shareViaEmail">ส่ง Link ผ่านอิเมล์</option>
+															<option value="showLink">แสดง Link</option>
+														</select>
 													</td>
 												</tr>
-											<?php
-										}
+												<tr>
+													<td colspan="2"><hr></td>
+												</tr>
+												<tr class="shareViaEmail">
+													<td class="form_field" style="font-weight: bold;padding-right:10px;">ส่ง Link ไปยังอิเมล์</td>
+													<td>
+														<input type="text" id="targetEmail" name="targetEmail" style="width: 200px;">
+													</td>
+												</tr>
+												<tr class="shareViaEmail">
+													<td colspan="2">
+														<input type="button" value="  ส่ง  " style="float: right;"
+															onclick="
+																$.post('shareLinkSQL.php',
+																		$('#shareForm').serialize()
+																	,function(data){
+																		$('#shareDIV').fadeOut();
+																		var temp=data.split('::');
+																		if(temp[0]=='complete'){
+																			$.post('shareLinkMSG.php',{
+																					labShareID: temp[1]
+																				},function(msg){
+																					$('#waitingDIV').fadeIn();
+																					$.post('sendShareEmail.php',{
+																							targetEmail: $('#targetEmail').val(),
+																							msg: msg,
+																							PersonalID: '<?php echo $person[PersonalID]?>'
+																						},function(data){
+																							if(data=='complete'){
+																								$('#targetEmail').val('');
+																								$('#waitingDIV').fadeOut(function(){
+																									alert('ส่งอิเมล์เรียบร้อย');
+																								});
+																							}
+																						}
+																					);
+																				}
+																			);
+																		}
+																	}
+																);
+															"
+														>
+													</td>
+												</tr>
+												<tr class="showLink" style="display: none;">
+													<td colspan="2">
+														<div id="linkDIV" 
+															style="
+																margin-bottom: 5px;
+																padding: 5px;
+																border: 1px solid #888;
+																display: none;
+															"
+														></div>
+														<input type="button" id="showLinkButton" value="  แสดง Link  " style="float: right;"
+															onclick="
+																$.post('shareLinkSQL.php',
+																		$('#shareForm').serialize()
+																	,function(data){
+																		var temp=data.split('::');
+																		if(temp[0]=='complete'){
+																			$('#linkDIV').show();
+																			$('#linkDIV').html(temp[1]);
+																			$('#showLinkButton').hide();
+																		}
+																	}
+																);
+															"
+														>
+													</td>
+												</tr>
+											</table>
+										</form>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<table class="noSpacing border_solid" style="width: 100%;">
+							<tr>
+								<td class="table_header right_solid bottom_solid" rowspan="2">Analyte (Method)</td>
+								<td class="table_header bottom_solid right_solid" colspan="3">Conventional Unit</td>
+								<td class="table_header bottom_solid" colspan="3">SI Unit</td>
+							</tr>
+							<tr>
+								<td class="table_header right_solid bottom_solid">Result</td>
+								<td class="table_header right_solid bottom_solid">Unit</td>
+								<td class="table_header right_solid bottom_solid">Reference Range</td>
+								<td class="table_header right_solid bottom_solid">Result</td>
+								<td class="table_header right_solid bottom_solid">Unit</td>
+								<td class="table_header bottom_solid">Reference Range</td>
+							</tr>
+							<?php
+								$i=0;
+								while($i<$numrows){
+									$row=mysql_fetch_array($result);
+									?>
+										<tr>
+											<td class="table_detail bottom_solid" style="background-color: #99C27E">
+												VN : <b><?php echo $row[VisitingNumber]?></b>
+											</td>
+											<td class="table_detail bottom_solid" colspan="3" align="center" style="background-color: #99C27E">
+												<?php echo dateEncode($row[LabDate])?>
+											</td>
+											<td class="table_detail bottom_solid" colspan="3" style="text-align: right;background-color: #99C27E">
+												<?php echo HospitalName($row[HospCode])." ($row[HospCode])"?>
+												<input type="button" value="  Print  " onclick="window.open('printLab.php?VisitingNumber=<?php echo $row[VisitingNumber];?>')">
+												<input type="button" value="  แบ่งปันผล Lab  " 
+													onclick="
+														$('#shareDIV').css('top',$(this).position().top);
+														$('#shareDIV').css('left',$(this).position().left-254);
+														$('#VN').html('<?php echo $row[VisitingNumber]?>');
+														$('#LabDate').html('<?php echo dateEncode($row[LabDate])?>');
+														$('#HospitalName').html('<?php echo HospitalName($row[HospCode])?>');
+														$('#LabTestID').val('<?php echo $row[LabTestID]?>');
+														$('#creditAvailable').val(1);
+														$('#linkDIV').html('');
+														$('#linkDIV').hide();
+														$('#showLinkButton').show();
+														$('#shareDIV').fadeIn();
+													"
+												>												
+											</td>
+										</tr>
+									<?php
+									$queryLabResult="
+										select		*
+										from		lab_test_result
+										where		LabTestID='$row[LabTestID]'
+										order by	ResultLabID
+									";
+									$resultLabResult=mysql_query($queryLabResult);
+									$numrowsLabResult=mysql_num_rows($resultLabResult);
+									$iLabResult=0;
+									while($iLabResult<$numrowsLabResult){
+										$rowLabResult=mysql_fetch_array($resultLabResult);
+										$utest=utest($rowLabResult[UniversalTestID]);
 										?>
 											<tr>
 												<td class="table_detail bottom_dashedGrey right_solid">
 													<div><?php echo $utest[UniversalTestName]?></div>
-													<div style="float: right;font-size: 15px;">
+													<div style="float: right;font-size: 85%;">
 													<?php if(MethodName($utest[MethodID])!="")echo "(".MethodName($utest[MethodID]).")"?></div>
 												</td>
 												
-												<td class="table_detail bottom_dashedGrey" style="text-align: right"><?php echo $labOrderDetail[ResultLab]?></td>
-												<td class="table_detail bottom_dashedGrey"><?php echo UnitName($labOrderDetail[UnitID])?></td>
-												<td class="table_detail bottom_dashedGrey right_solid" style="text-align: center"><?php echo $labOrderDetail[ReferenceResult]?></td>
+												<td class="table_detail bottom_dashedGrey" style="text-align: right"><?php echo $rowLabResult[ResultLab]?></td>
+												<td class="table_detail bottom_dashedGrey"><?php echo UnitName($rowLabResult[UnitCode])?></td>
+												<td class="table_detail bottom_dashedGrey right_solid" style="text-align: center"><?php echo $rowLabResult[ReferenceResult]?></td>
 												
-												<td class="table_detail bottom_dashedGrey" style="text-align: right"><?php echo $labOrderDetail[ResultUniversal]?></td>
-												<td class="table_detail bottom_dashedGrey"><?php echo $labOrderDetail[UnitUniversal]?></td>
-												<td class="table_detail bottom_dashedGrey" style="text-align: center"><?php echo $labOrderDetail[ReferenceUniversalTest]?></td>
+												<td class="table_detail bottom_dashedGrey" style="text-align: right"><?php echo $rowLabResult[ResultUniversal]?></td>
+												<td class="table_detail bottom_dashedGrey"><?php echo $rowLabResult[UnitUniversal]?></td>
+												<td class="table_detail bottom_dashedGrey" style="text-align: center"><?php echo $rowLabResult[ReferenceUniversalTest]?></td>
 											</tr>
 										<?php
-									}else{
-										for($iLab=0;$result[item][$iLab][labOrder]!=null;$iLab++){													
-											$labOrderDetail=$result[item][$iLab][labOrderDetail];
-											$utest=utest($labOrderDetail[UniversalTestID]);
-											if($lastVN!=$result[item][$iLab][labOrder][VisitingNumber]){
-												$lastVN=$result[item][$iLab][labOrder][VisitingNumber];
-												$HospCode=$result[item][$iLab][labOrder][Hospital];
-												?>
-													<tr>
-														<td class="table_detail bottom_solid" style="background-color: #99C27E">
-															VN : <b><?php echo $lastVN?></b>
-														</td>
-														<td class="table_detail bottom_solid" colspan="3" align="center" style="background-color: #99C27E">
-															<?php echo dateEncode($result[item][$iLab][labOrder][LabDate])?>
-														</td>
-														<td class="table_detail bottom_solid" colspan="3" style="text-align: right;background-color: #99C27E">
-															<?php echo HospitalName($HospCode)." ($HospCode)"?>
-															<input type="button" value="  Print  " onclick="window.open('printLab.php?VisitingNumber=<?php echo $lastVN;?>')">
-														</td>
-													</tr>
-												<?php
-											}
-											?>
-												<tr>
-													<td class="table_detail bottom_dashedGrey right_solid">
-														<div><?php echo $utest[UniversalTestName]?></div>
-														<div style="float: right;font-size: 85%;">
-														<?php if(MethodName($utest[MethodID])!="")echo "(".MethodName($utest[MethodID]).")"?></div>
-													</td>
-													
-													<td class="table_detail bottom_dashedGrey" style="text-align: right"><?php echo $labOrderDetail[ResultLab]?></td>
-													<td class="table_detail bottom_dashedGrey"><?php echo UnitName($labOrderDetail[UnitID])?></td>
-													<td class="table_detail bottom_dashedGrey right_solid" style="text-align: center"><?php echo $labOrderDetail[ReferenceResult]?></td>
-													
-													<td class="table_detail bottom_dashedGrey" style="text-align: right"><?php echo $labOrderDetail[ResultUniversal]?></td>
-													<td class="table_detail bottom_dashedGrey"><?php echo $labOrderDetail[UnitUniversal]?></td>
-													<td class="table_detail bottom_dashedGrey" style="text-align: center"><?php echo $labOrderDetail[ReferenceUniversalTest]?></td>
-												</tr>
-											<?php
-										}
+										$iLabResult++;
 									}
-								?>
-							</table>
-						<?php
-					}else{
-						echo "Result not found!";
-					}
-				} catch (Exception $e) {
-					printf("Message = %s\n",$e->getMessage());
+									$i++;
+								} 
+							?>
+						</table>
+					<?php
 				}
 			?>
 			<input type="button" value=" Home " style="float: right;" onclick="window.open('../home','_self')">
