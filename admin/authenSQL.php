@@ -13,7 +13,7 @@
 	$result=mysql_query($query);
 	$row=mysql_fetch_array($result);
 	if(mysql_num_rows($result)==0 || aesDecrypt($row[Password])!=$Password){
-	$ownerID=$row[PersonalID];
+		$ownerID=$row[AdminID];
 		if($ownerID==""){
 			$query="
 				insert into	log_authen_admin
@@ -64,7 +64,7 @@
 					datetime
 				) values (
 					'$_SERVER[REMOTE_ADDR]',
-					'$row[PersonalID]',
+					'$row[AdminID]',
 					'$User',
 					'pass',
 					CURRENT_TIMESTAMP

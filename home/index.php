@@ -41,6 +41,26 @@
 						</td>
 					</tr>
 				</table>
+			</div><br>
+			<div class="homeIcon" id="menu_logHistory" style="float: left;">
+				<table style="width: 100%;height: 100%;">
+					<tr>
+						<td style="text-align: center;vertical-align: middle">
+							<img src="../img/history.png" height="100"><br>
+							Log History<br>(ประวัติการเข้าใช้ระบบ)
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="homeIcon" id="menu_logHistory_lab" style="float: left;">
+				<table style="width: 100%;height: 100%;">
+					<tr>
+						<td style="text-align: center;vertical-align: middle">
+							<img src="../img/history_lab.png" height="100"><br>
+							Lab Access History<br>(ประวัติการเข้าดูผลตรวจจากห้องปฏิบัติการ)
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div class="homeIcon" class="menu_logout" style="float: left;"
 				onclick="window.open('../authen/logout.php','_self');"
@@ -66,6 +86,12 @@
 	});
 	$('#menu_vaccinationHistory').click(function(){
 		window.open('../vaccine','_self');
+	});
+	$('#menu_logHistory').click(function(){
+		window.open('../logHistory','_self');
+	});
+	$('#menu_logHistory_lab').click(function(){
+		window.open('../logHistory/indexLab.php','_self');
 	});
 </script>
 <?php
