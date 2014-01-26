@@ -44,6 +44,12 @@
 					$('#container').html(data);
 				});
 			});
+
+			$('#menu_logHistory').click(function(){
+				$.post('logHistory.php',function(data){
+					$('#container').html(data);
+				});
+			});
 			
 		});
 	})
@@ -99,6 +105,9 @@
 				?>
 				<tr>
 					<td id="menu_changePassword" class="mainMenu_item">เปลี่ยนรหัสผ่าน</td>
+				</tr>
+				<tr>
+					<td id="menu_logHistory" class="mainMenu_item">ประวัติการเข้าใช้ระบบ</td>
 				</tr>
 			</table>
 		</td>
