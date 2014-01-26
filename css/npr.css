@@ -290,3 +290,14 @@ input[type=submit].nprButton:active, input[type=reset].nprButton:active{
 	background-color: #fff;
 	box-shadow: 1px 1px 3px #888;	
 }
+.pageButton{
+	border: 1px solid #888;
+	padding: 0px 3px 0px 3px;
+	margin: 1px;
+	font-size: 90%;
+	cursor: pointer;
+}
+.pageButton:hover{
+	font-weight: bold;
+	color: #f00;
+}

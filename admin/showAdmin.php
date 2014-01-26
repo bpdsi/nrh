@@ -4,6 +4,7 @@
 	noCache();
 	host("nrh");
 	headerEncode();
+	$page=$_POST["page"];
 ?>
 <style>
 	.table_header{
@@ -298,6 +299,92 @@
 		</tr>
 	</table>
 </div>
+<?php
+	$perPage=12;
+	if($page==""){
+		$page=1;
+	}
+	if($page==1){
+		$startRecord=0;
+	}else{
+		$startRecord=($page-1)*$perPage;
+	}
+	$query="
+		select	*
+		from	admin
+		where	AdminID in (
+					select 	AdminID
+					from	admin_hospital
+					where	hospcode='".$_POST['hospcode']."'	
+				) and
+				status='enable'
+	";
+	$result=mysql_query($query);
+	$numrows=mysql_num_rows($result);
+	$pageCount=$numrows/$perPage;
+	if((int)$pageCount<$pageCount){
+		$pageCount=((int)$pageCount)+1;
+	} 
+?>
+<table style="margin-left: auto;">
+	<tr>
+		<td align="right">
+			<?php
+				if($page>1){
+					?>
+						<div style="float: left;" class="pageButton"
+							onclick="
+								$.post('showAdmin.php',{
+										page: '<?php echo $page-1;?>',
+										hospcode: '<?php echo $_POST["hospcode"]?>'
+									},function(data){
+										$('#contentTD').html(data);
+									}
+								);
+							"
+						>&lt;</div>
+					<?php
+				}
+				for($i=1;$i<=$pageCount;$i++){
+					?>
+						<div class="pageButton"
+							style="
+								float: left;
+								<?php
+									if($i==$page){
+										?>color: #b90000; font-weight: bold;<?php
+									}
+								?>
+							"
+							onclick="
+								$.post('showAdmin.php',{
+										page: '<?php echo $i;?>',
+										hospcode: '<?php echo $_POST["hospcode"]?>'
+									},function(data){
+										$('#contentTD').html(data);
+									}
+								);
+							"
+						><?php echo $i;?></div><?php
+				}
+				if($page<$pageCount){
+					?>
+					<div style="float: left;" class="pageButton"
+						onclick="
+							$.post('showAdmin.php',{
+									page: '<?php echo $page+1;?>',
+									hospcode: '<?php echo $_POST["hospcode"]?>'
+								},function(data){
+									$('#contentTD').html(data);
+								}
+							);
+						"
+					>&gt;</div><?php
+				}
+			?>
+		</td>
+	</tr>
+</table>
 <table class="noSpacing table_01" style="width: 100%;">
 	<tr>
 		<td class="table_header" colspan="2">ชื่อผู้ใช้ระบบ</td>
@@ -307,17 +394,7 @@
 		<td class="table_header" colspan="2">วันที่สมัคร</td>
 	</tr>
 	<?php
-		$query="
-			select	*
-			from	admin
-			where	AdminID in (
-						select 	AdminID
-						from	admin_hospital
-						where	hospcode='".$_POST['hospcode']."'	
-					) and
-					status='enable'
-		";
-		$result=mysql_query($query);
+		$result=mysql_query($query." limit	$startRecord,$perPage");
 		$numrows=mysql_num_rows($result);
 		$i=0;
 		while($i<$numrows){

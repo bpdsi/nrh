@@ -5,6 +5,7 @@
 	host("nrh");
 	headerEncode();
 	$keyword=$_POST["keyword"];
+	$page=$_POST["page"];
 ?>
 <style>
 	.table_header{
@@ -168,6 +169,92 @@
 		</tr>
 	</table>
 </div>
+<?php
+	$perPage=12;
+	if($page==""){
+		$page=1;
+	}
+	if($page==1){
+		$startRecord=0;
+	}else{
+		$startRecord=($page-1)*$perPage;
+	}
+	$query="
+		select	*
+		from	vc_vaccine
+		where	BPS_STD like '%$keyword%' or
+				Vaccine_Name like '%$keyword%' or
+				Vaccine_Name_EN like '%$keyword%' or
+				Prevention like '%$keyword%' or
+				Age like '%$keyword%' or
+				ICD10 like '%$keyword%'
+	";
+	$result=mysql_query($query);
+	$numrows=mysql_num_rows($result);
+	$pageCount=$numrows/$perPage;
+	if((int)$pageCount<$pageCount){
+		$pageCount=((int)$pageCount)+1;
+	}
+?>
+<table style="margin-left: auto;">
+	<tr>
+		<td align="right">
+			<?php
+				if($page>1){
+					?>
+						<div style="float: left;" class="pageButton"
+							onclick="
+								$.post('showVaccine.php',{
+										page: '<?php echo $page-1;?>',
+										keyword: '<?php echo $keyword?>'
+									},function(data){
+										$('#contentTD').html(data);
+									}
+								);
+							"
+						>&lt;</div>
+					<?php
+				}
+				for($i=1;$i<=$pageCount;$i++){
+					?>
+						<div class="pageButton"
+							style="
+								float: left;
+								<?php
+									if($i==$page){
+										?>color: #b90000; font-weight: bold;<?php
+									}
+								?>
+							"
+							onclick="
+								$.post('showVaccine.php',{
+										page: '<?php echo $i;?>',
+										keyword: '<?php echo $keyword?>'
+									},function(data){
+										$('#contentTD').html(data);
+									}
+								);
+							"
+						><?php echo $i;?></div><?php
+				}
+				if($page<$pageCount){
+					?>
+					<div style="float: left;" class="pageButton"
+						onclick="
+							$.post('showVaccine.php',{
+									page: '<?php echo $page+1;?>',
+									keyword: '<?php echo $keyword?>'
+								},function(data){
+									$('#contentTD').html(data);
+								}
+							);
+						"
+					>&gt;</div><?php
+				}
+			?>
+		</td>
+	</tr>
+</table>
 <table class="noSpacing table_01" style="width: 100%;">
 	<tr>
 		<td class="table_header" colspan="2">รหัสมาตรฐาน สนย.</td>
@@ -178,17 +265,7 @@
 		<td class="table_header" colspan="2">รหัส ICD_10_TM</td>
 	</tr>
 	<?php
-		$query="
-			select	*
-			from	vc_vaccine
-			where	BPS_STD like '%$keyword%' or
-					Vaccine_Name like '%$keyword%' or
-					Vaccine_Name_EN like '%$keyword%' or
-					Prevention like '%$keyword%' or
-					Age like '%$keyword%' or
-					ICD10 like '%$keyword%'
-		";
-		$result=mysql_query($query);
+		$result=mysql_query($query." limit	$startRecord,$perPage");
 		$numrows=mysql_num_rows($result);
 		$i=0;
 		while($i<$numrows){
@@ -268,6 +345,6 @@
 		} 
 	?>
 	<tr>
-		<td class="table_footer" colspan="7" style="text-align: right"><?php echo $numrows?> รายชื่อ</td>
+		<td class="table_footer" colspan="8" style="text-align: right"><?php echo $numrows?> รายชื่อ</td>
 	</tr>
 </table>
