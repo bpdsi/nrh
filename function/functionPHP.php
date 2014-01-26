@@ -447,3 +447,28 @@
 		
 		return $dayNum."/".$monNum."/".$yearNum;
 	}
+	
+	function vc_deletable($Vaccine_Code){
+		host("nrh");
+		$query="
+			select	*
+			from	vc_vaccination
+			where	Vaccine_Code='$Vaccine_Code'
+		";
+		$result=mysql_query($query);
+		if(mysql_num_rows($result)>0){
+			return false;
+		}else{
+			$query="
+				select	*
+				from	vcp_vaccination
+				where	Vaccine_Code='$Vaccine_Code'
+			";
+			$result=mysql_query($query);
+			if(mysql_num_rows($result)>0){
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
