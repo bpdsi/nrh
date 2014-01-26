@@ -25,6 +25,12 @@
 				});
 			});
 
+			$('#menu_vaccine').click(function(){
+				$.post('vaccine.php',function(data){
+					$('#container').html(data);
+				});
+			});
+
 			$('#menu_patientRegist').click(function(){
 				window.open('../register','_self');
 			});
@@ -78,6 +84,9 @@
 									?>
 										<tr>
 											<td id="menu_config" class="mainMenu_item">การตั้งค่า</td>
+										</tr>
+										<tr>
+											<td id="menu_vaccine" class="mainMenu_item">รายการวัคซีน</td>
 										</tr>
 									<?php
 								} 
