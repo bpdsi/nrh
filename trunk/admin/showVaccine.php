@@ -191,6 +191,7 @@
 	";
 	$result=mysql_query($query);
 	$numrows=mysql_num_rows($result);
+	$total=$numrows;
 	$pageCount=$numrows/$perPage;
 	if((int)$pageCount<$pageCount){
 		$pageCount=((int)$pageCount)+1;
@@ -345,6 +346,6 @@
 		} 
 	?>
 	<tr>
-		<td class="table_footer" colspan="8" style="text-align: right"><?php echo $numrows?> รายชื่อ</td>
+		<td class="table_header" colspan="8" style="text-align: right"><?php echo number_format($total)?> รายชื่อ</td>
 	</tr>
 </table>
