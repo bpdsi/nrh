@@ -1,7 +1,7 @@
 <?php
 	include "../function/functionPHP.php";
-
-	$AllowID=aesDecrypt(urldecode($_GET["key"]));
+	
+	$AllowID=aesDecrypt($_GET["key"]);
 		
 	if($Hospital==""){
 		$Hospital=11470;
@@ -39,12 +39,12 @@
 	$person=get_person($PersonalID);
 	
 	if($person[User]!="" && $person[Password]!=""){
-		$query="
+		/*$query="
 			update	person_allow
 			set		AllowStatus='accepted'
 			where	AllowID='$AllowID'
 		";
-		$result=mysql_query($query);
+		$result=mysql_query($query);*/
 		//header("location:../authen");
 		//exit();
 	}
@@ -137,123 +137,173 @@
 			}
 		</style>
 	</head>
-	<body>	
-		<div class="form" style="width: 660px;margin-left: auto;margin-right: auto;">
-			<table class="form" style="width: 100%;">
-				<tr>
-					<td class="form_header" colspan="2"><h1 class="header">ยืนยันการสมัคร</h1></td>
-				</tr>
-				<tr>
-					<td class="form_body" align="center">
-						<table>
+	<body>
+		<div style="position: fixed;bottom: 0px;right:0px;padding: 5px;">©2013 Personal Health Databank</div>
+		<table class="fullScreen noSpacing">
+			<tr>
+				<td style="width: auto;">&nbsp;</td>
+				<td style="width: 800px;background-color: #eee;">
+					<div class="form" style="width: 660px;margin-left: auto;margin-right: auto;">
+						<table class="form" style="width: 100%;">
 							<tr>
-								<td valign="top" align="center" style="width: 170px;">
-									<img src="../img/person.png">
-									<div style="font-size: 14px;"><?php echo $person[PersonName]?></div>
+								<td class="form_header" colspan="2" style="font-weight: bold;">
+									<div id="titleDIV" style="float:left;">
+										ระบบฐานข้อมูลสุขภาพ<br>
+										Personal Health Databank
+									</div>
+									<img src="../img/nectecLogo.png" height="30" 
+										style="
+											float: right;
+											cursor: pointer;
+										"
+										onclick="window.open('http://www.nectec.or.th/','_blank');"
+									>
+									<img src="../img/kuLogo.png" height="30" 
+										style="
+											float: right;
+											padding-right: 10px;
+											cursor: pointer;
+										"
+										onclick="window.open('http://www.ku.ac.th/','_blank');"
+									>
+									<img src="../img/etdaLogo.png" height="30" 
+										style="
+											float: right;
+											padding-right: 10px;
+											cursor: pointer;
+										"
+										onclick="window.open('http://www.etda.or.th/','_blank');"
+									>									
 								</td>
-								<td>
-									<form id="confirmForm" method="post" action="confirmSQL.php">
-										<input type="hidden" name="key" value="<?php echo urlencode(aesEncrypt($AllowID))?>">
-										<table>
-											<tr>
-												<td class="form_field"><?php echo $HospCode;?></td>
-												<td class="form_input"><?php echo HospitalName($HospCode);?></td>
-											</tr>
-											<tr>
-												<td colspan="2"><hr /></td>
-											</tr>
-											<tr>
-												<td class="form_field">Hospital Number (HN)</td>
-												<td class="form_input"><?php echo $HospitalNumber?></td>
-											</tr>
-											<tr>
-												<td class="form_field">CitizenID</td>
-												<td class="form_input"><?php echo $person[CitizenID]?></td>
-											</tr>
-											<tr>
-												<td class="form_field">GivenName FamilyName</td>
-												<td class="form_input"><?php echo $person[PersonName]?></td>
-											</tr>
-											<tr>
-												<td class="form_field">Telephone</td>
-												<td class="form_input"><?php echo $person[Telephone]?></td>
-											</tr>
-											<tr>
-												<td class="form_field">Email</td>
-												<td class="form_input"><?php echo $person[Email]?></td>
-											</tr>
-											<tr>
-												<td class="form_field">กรุ๊ปเลือด</td>
-												<td class="form_input">
-													O
-													&nbsp;
-													Rh +
-												</td>
-											</tr>
-											<tr>
-												<td class="form_field">ต้องการเก็บประวัติข้อมูลประวัติการรับวัคซีน</td>
-												<td class="form_input">
-													<?php
-														if($AllowType=="Perday"){
-															echo "เฉพาะวันที่ ".substr($AllowDate,0,10);
-														}else if($AllowType=="Unconditioned"){
-															echo "ตั้งแต่วันที่ ".$AllowDate;
-														}
-													?>
-												</td>
-											</tr>
-											<tr>
-												<td colspan="2"><hr /></td>
-											</tr>
-											<tr>
-												<td class="form_field">User</td>
-												<td class="form_input">
-													<input id="User" type="text" class="text-input focus nextFocus" next="Password" name="User" value="" />
-												</td>
-											</tr>
-											<tr>
-												<td class="form_field">Password</td>
-												<td class="form_input">
-													<input id="Password" type="password" class="text-input password link-password nextClick" next="submitButton" name="Password" value=""
-														size="8"
-													/><input id="generate" class="link-password" type="button" value=" Generate Password " /><br>
-													<div class="form-row text-right" id="random"></div>
-													<a href="#" class="link-password" id="confirm" style="display: none;">Use Password</a>
-												</td>
-											</tr>
-										</table>
-									</form>
+							</tr>
+							<tr>
+								<td class="form_body" align="center">
+									<table>
+										<tr>
+											<td valign="top" align="center" style="width: 170px;">
+												<img src="../img/person.png">
+												<div style="font-size: 14px;"><?php echo $person[PersonName]?></div>
+											</td>
+											<td>
+												<div style="float: right">ยืนยันการสมัคร</div><br>
+												<form id="confirmForm" method="post" action="confirmSQL.php">
+													<input type="hidden" name="key" value="<?php echo urlencode(aesEncrypt($AllowID))?>">
+													<table>
+														<tr>
+															<td class="form_field"><?php echo $HospCode;?></td>
+															<td class="form_input"><?php echo HospitalName($HospCode);?></td>
+														</tr>
+														<tr>
+															<td colspan="2"><hr /></td>
+														</tr>
+														<tr>
+															<td class="form_field">Hospital Number (HN)</td>
+															<td class="form_input"><?php echo $HospitalNumber?></td>
+														</tr>
+														<tr>
+															<td class="form_field">หมายเลขบัตรประชาชน</td>
+															<td class="form_input"><?php echo $person[CitizenID]?></td>
+														</tr>
+														<tr>
+															<td class="form_field">ชื่อ นามสกุล</td>
+															<td class="form_input"><?php echo $person[PersonName]?></td>
+														</tr>
+														<tr>
+															<td class="form_field">หมายเลขโทรศัพท์</td>
+															<td class="form_input"><?php echo $person[Telephone]?></td>
+														</tr>
+														<tr>
+															<td class="form_field">อิเมล์</td>
+															<td class="form_input"><?php echo $person[Email]?></td>
+														</tr>
+														<tr>
+															<td class="form_field">กรุ๊ปเลือด</td>
+															<td class="form_input">
+																O
+																&nbsp;
+																Rh +
+															</td>
+														</tr>
+														<tr>
+															<td class="form_field">ต้องการเก็บประวัติข้อมูลแลป</td>
+															<td class="form_input">
+																<?php
+																	if($AllowType=="Perday"){
+																		echo "เฉพาะวันที่ ".substr($AllowDate,0,10);
+																	}else if($AllowType=="Unconditioned"){
+																		echo "ตั้งแต่วันที่ ".$AllowDate;
+																	}
+																?>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2"><hr /></td>
+														</tr>
+														<tr>
+															<td class="form_field">ชื่อผู้ใช้</td>
+															<td class="form_input">
+																<input id="User" type="text" class="text-input focus nextFocus" next="Password" name="User" value=""
+																	onblur="
+																		$.post('checkUsername.php',{
+																				User: $('#User').val()
+																			},function(data){
+																				if(data=='unavailable'){
+																					alert('ไม่สามารถใช้ชื่อผู้ใช้ระบบนี้ได้');
+																					$('#User').focus();
+																				}
+																			}
+																		);
+																	" 
+																/>
+															</td>
+														</tr>
+														<tr>
+															<td class="form_field">รหัสผ่าน</td>
+															<td class="form_input">
+																<input id="Password" type="password" class="text-input password link-password nextClick" next="submitButton" name="Password" value=""
+																	size="8"
+																/><input id="generate" class="link-password" type="button" value=" Generate Password " /><br>
+																<div class="form-row text-right" id="random"></div>
+																<a href="#" class="link-password" id="confirm" style="display: none;">Use Password</a>
+															</td>
+														</tr>
+													</table>
+												</form>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td class="form_footer">
+									<input class="nprButton" type='reset' value="   ปฏิเสธ   " style="float: left;"
+										onclick="
+											if(confirm('ต้องการยกเลิกคำขอนี้')){
+												location.replace('reject.php?key=<?php echo $_GET["key"]?>');
+											}
+										"
+									>
+									<input id="submitButton" class="nprButton" type='submit' value="   บันทึก   "
+										onclick="
+											var	User=$('#User').val();
+											var	Password=$('#Password').val();
+											
+											if(User==''){
+												alert('กรุณากรอก User');
+											}else if(Password==''){
+												alert('กรุณากรอก Password');
+											}else{
+												$('#confirmForm').submit();
+											}
+										";
+									>
 								</td>
 							</tr>
 						</table>
-					</td>
-				</tr>
-				<tr>
-					<td class="form_footer">
-						<input class="nprButton" type='reset' value="   ปฏิเสธ   " style="float: left;"
-							onclick="
-								if(confirm('ต้องการยกเลิกคำขอนี้')){
-									location.replace('reject.php?key=<?php echo $_GET["key"]?>');
-								}
-							"
-						>
-						<input id="submitButton" class="nprButton" type='submit' value="   บันทึก   "
-							onclick="
-								var	User=$('#User').val();
-								var	Password=$('#Password').val();
-								
-								if(User==''){
-									alert('กรุณากรอก User');
-								}else if(Password==''){
-									alert('กรุณากรอก Password');
-								}else{
-									$('#confirmForm').submit();
-								}
-							";
-						>
-					</td>
-				</tr>
-			</table>
-		</div>
+					</div>
+				</td>
+				<td style="width: auto;">&nbsp;</td>
+			</tr>
+		</table>
 	</body>
 </html>

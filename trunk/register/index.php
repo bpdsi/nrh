@@ -433,9 +433,11 @@
 				</tr>
 			</table>
 		</div>
+		<div style="position: fixed;bottom: 0px;right:0px;padding: 5px;">©2013 Personal Health Databank</div>
 		<table style="width: 100%;height: 100%">
 			<tr>
-				<td style="text-align: center;vertical-align: middle">
+				<td style="width: auto;">&nbsp;</td>
+				<td style="width: 800px;background-color: #eee;">
 					<input type="hidden" id="refer_url" value="http://nrh.dyndns.org/production/refer_service.php">
 					<div class="form" style="width: 750px;margin-left: auto;margin-right: auto;">
 						<table class="form" style="width: 100%;">
@@ -459,7 +461,7 @@
 												ทะเบียนผู้ขอใช้สิทธิ์
 											</td>
 											<td style="padding: 0px 10px 0px 10px;">
-												<form id="registForm" method="post" action="registerSQL.php">
+												<form id="registForm" method="post" action="registerSQL.php" target="tempFrame">
 													<table>
 														<tr>
 															<td class="form_field">โรงพยาบาล</td>
@@ -711,7 +713,7 @@
 							</tr>
 							<tr>
 								<td class="form_footer">
-									<input class="nprButton" type='reset' value="   กลับสู่หน้าหลัก   " style="float: left;"
+									<input class="nprButton" id="homeButton" type='reset' value="   กลับสู่หน้าหลัก   " style="float: left;"
 										onclick="
 											/*var HospitalName=$('#HospitalName').val();
 											$('#registForm')[0].reset();
@@ -747,16 +749,21 @@
 											}else if(Email==''){
 												alert('กรุณากรอก อีเมล์');
 											}else if(confirmType=='email'){
-												$('#registForm').submit();
+												$('#waitingDIV').fadeIn(function(){
+													$('#registForm').submit();
+												});
 											}else if(currentUser=='true'){
-												$('#registForm').attr('action','registerSQL.php');
-												$('#registForm').submit();
+												$('#waitingDIV').fadeIn(function(){
+													$('#registForm').attr('action','registerSQL.php');
+													$('#registForm').submit();
+												});
 											}else if(confirmType=='document'){
 												$('#registForm').attr('action','createDocumentSQL.php');
 												$('#registForm').submit();
 											}
 										";
 									>
+									<iframe name="tempFrame" style="display: none"></iframe>
 								</td>
 							</tr>
 						</table>
@@ -811,6 +818,7 @@
 						</table>
 					</div>
 				</td>
+				<td style="width: auto;">&nbsp;</td>
 			</tr>
 		</table>
 	</body>

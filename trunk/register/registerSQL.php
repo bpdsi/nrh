@@ -160,9 +160,10 @@
 						AllowID: '<?php echo $AllowID?>',
 						message: data
 					},function(data){
-						alert(data);
-						alert("Registration Complete");
-						location.replace("index.php");
+						alert("กรุณายืนยันการสมัครผ่านอิเมล์ของผู้ขอใช้สิทธิ์");
+						window.parent.$('#waitingDIV').fadeOut(function(){
+							window.parent.$('#homeButton').click();
+						});
 					}
 				);
 			}

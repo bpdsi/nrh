@@ -57,16 +57,45 @@
 		</style>
 	</head>
 	<body>
+		<div style="position: fixed;bottom: 0px;right:0px;padding: 5px;">©2013 Personal Health Databank</div>
 		<table class="fullScreen">
 			<tr>
-				<td>
+				<td style="width: auto;">&nbsp;</td>
+				<td style="width: 800px;background-color: #eee;">
 					<div class="form" style="width: 450px;margin-left: auto;margin-right: auto;margin-top: auto;margin-bottom: auto;padding: 0px;">
 						<table class="form" style="width: 100%;">
 							<tr>
-								<td class="form_header" colspan="2" style="font-weight: bold;">
-									<div id="titleDIV" style="float:left;">ระบบฐานข้อมูลสุขภาพ</div>
-									<div style="float: right;">เข้าสู่ระบบ</div>
-								</td>
+								<tr>
+									<td class="form_header" colspan="2" style="font-weight: bold;">
+										<div id="titleDIV" style="float:left;">
+											ผู้ดูแลระบบ<br>
+											Administer System
+										</div>
+										<img src="../img/nectecLogo.png" height="30" 
+											style="
+												float: right;
+												cursor: pointer;
+											"
+											onclick="window.open('http://www.nectec.or.th/','_blank');"
+										>
+										<img src="../img/kuLogo.png" height="30" 
+											style="
+												float: right;
+												padding-right: 10px;
+												cursor: pointer;
+											"
+											onclick="window.open('http://www.ku.ac.th/','_blank');"
+										>
+										<img src="../img/etdaLogo.png" height="30" 
+											style="
+												float: right;
+												padding-right: 10px;
+												cursor: pointer;
+											"
+											onclick="window.open('http://www.etda.or.th/','_blank');"
+										>
+									</td>
+								</tr>
 							</tr>
 							<tr>
 								<td class="form_body" align="center">
@@ -99,11 +128,7 @@
 							<tr>
 								<td class="form_footer">
 									<input class="nprButton" type='reset' value="   ลืมรหัสผ่าน   " style="float: left;"
-										onclick="
-											var HospitalName=$('#HospitalName').val();
-											$('#registForm')[0].reset();
-											$('#HospitalName').val(HospitalName);
-										"
+										onclick="alert('กรุณาติดต่อ ผู้ดูแลระบบส่วนกลาง โทร xx-xxxxxxx')"
 									>
 									<input class="nprButton" id="submitButton" type='submit' value="   เข้าสู่ระบบ   "
 										onclick="
@@ -122,6 +147,7 @@
 						</table>
 					</div>
 				</td>
+				<td style="width: auto;">&nbsp;</td>
 			</tr>
 		</table>
 	</body>

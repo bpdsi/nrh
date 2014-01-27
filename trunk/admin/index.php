@@ -97,7 +97,7 @@
 									<?php
 								} 
 							?>
-							<tr>
+							<tr style="display: none">
 								<td id="menu_unit" class="mainMenu_item">Unit</td>
 							</tr>
 						<?php
