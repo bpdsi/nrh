@@ -531,33 +531,46 @@
 																/><input id="555blnLoadMember" type="button" value=" Get Details "
 																	onclick="
 																		if($('#HospitalNumber').val()==''){
-																			alert('กรุณากรอก HN')
+																			alert('กรุณากรอก HN');
 																		}else{
-																			$('#waitingDIV').fadeIn();
-																			$.post('get_patient2.php',{
-																					hospCode: $('#Hospital').val(),
-																					hospitalNumber: $('#HospitalNumber').val()
-																				},function(data){
-																					//alert(data);
-																					var aaa=data.split('::');
-																					if(aaa[1]!=''){
-																						$('#Prefix').val(aaa[0]);
-																						$('#Name').val(aaa[1]+' '+aaa[2]+' '+aaa[3]);
-																						var bd=aaa[4].split('-');
-																						$('#BirthDate').val(bd[2]+'/'+bd[1]+'/'+(parseInt(bd[0])+543));
-																						//$('#Gender').val(aaa[5]);
-																						$('#Telephone').val(aaa[6]);
-																						$('#Email').val(aaa[7]);
-																						$('#BloodGroupABO').val(aaa[8]);
-																						$('#BloodTypeRh').val(aaa[9]);
-																						$('#HospitalNumber').val(aaa[10]);
-																						$('#CitizenID').val(aaa[11]);
-																					}else{
-																						alert('ไม่พบข้อมูลผู้ป่วย');
+																			$('#waitingDIV').fadeIn(function(){
+																				$.post('checkPatient.php',{
+																						HospCode: $('#Hospital').val(),
+																						HospitalNumber: $('#HospitalNumber').val()
+																					},function(data){
+																						if(data=='current'){
+																							alert('HN นี้มีการสมัครเป็นสมาชิกของระบบแล้ว');
+																							$('#HospitalNumber').focus();
+																							$('#waitingDIV').fadeOut();
+																						}else if(data=='new'){
+																							$.post('get_patient2.php',{
+																									hospCode: $('#Hospital').val(),
+																									hospitalNumber: $('#HospitalNumber').val()
+																								},function(data){
+																									//alert(data);
+																									var aaa=data.split('::');
+																									if(aaa[1]!=''){
+																										$('#Prefix').val(aaa[0]);
+																										$('#Name').val(aaa[1]+' '+aaa[2]+' '+aaa[3]);
+																										var bd=aaa[4].split('-');
+																										$('#BirthDate').val(bd[2]+'/'+bd[1]+'/'+(parseInt(bd[0])+543));
+																										//$('#Gender').val(aaa[5]);
+																										$('#Telephone').val(aaa[6]);
+																										$('#Email').val(aaa[7]);
+																										$('#BloodGroupABO').val(aaa[8]);
+																										$('#BloodTypeRh').val(aaa[9]);
+																										$('#HospitalNumber').val(aaa[10]);
+																										$('#CitizenID').val(aaa[11]);
+																									}else{
+																										alert('ไม่พบข้อมูลผู้ป่วย');
+																									}
+																									$('#waitingDIV').fadeOut();
+																								}
+																							);
+																						}
 																					}
-																					$('#waitingDIV').fadeOut();
-																				}
-																			)
+																				);
+																			});
 																		}
 																	" 
 																/>
