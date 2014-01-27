@@ -1,9 +1,6 @@
 <?php
 	include "../function/functionPHP.php";
 	host("nrh");
-	if(!staffAuthenticated()){
-		exit();
-	}
 	
 	$AllowID=aesDecrypt(urldecode($_POST["key"]));
 	$User=$_POST["User"];
@@ -32,9 +29,10 @@
 		where	AllowID='$AllowID'
 	";
 	$result=mysql_query($query);
+	
 ?>
 <script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
 <script type="text/javascript">
-	alert("Registration Complete");
+	alert("ลงทะเบียนเรียบร้อย");
 	window.open('../authen','_self');
 </script>

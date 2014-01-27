@@ -225,9 +225,30 @@
 								
 							"
 						>Personal Health Databank</div>
-						<img src="../img/nectecLogo.png" height="40" style="float: right;margin: 0px 10px 0px 10px">
-						<img src="../img/kuLogo.png" height="40" style="float: right;margin: 0px 10px 0px 10px">
-						<img src="../img/etdaLogo.png" height="40" style="float: right;margin: 0px 10px 0px 10px">
+						<img src="../img/nectecLogo.png" height="40"
+							style="
+								float: right;
+								margin: 0px 10px 0px 10px;
+								cursor: pointer;
+							"
+							onclick="window.open('http://www.nectec.or.th/','_blank');"
+						>
+						<img src="../img/kuLogo.png" height="40" 
+							style="
+								float: right;
+								margin: 0px 10px 0px 10px;
+								cursor: pointer;
+							"
+							onclick="window.open('http://www.ku.ac.th/','_blank');"
+						>
+						<img src="../img/etdaLogo.png" height="40" 
+							style="
+								float: right;
+								margin: 0px 10px 0px 10px;
+								cursor: pointer;
+							"
+							onclick="window.open('http://www.etda.or.th/','_blank');"
+						>
 					</td>
 				</tr>
 				<tr>
