@@ -1,5 +1,5 @@
 <?php
-	$functionName="Lab Access History (ประวัติการเข้าดูผลตรวจจากห้องปฏิบัติการ)";
+	$functionName="Lab Access History (ประวัติการเข้าดูผลตรวจจากห้องปฏิบัติการ จากบุคคลภายนอก)";
 	include "../template/header.php";
 ?>
 <table class="noSpacing" style="width: 100%;height: 100%;">

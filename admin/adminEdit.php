@@ -10,6 +10,7 @@
 	$BirthDate=($BirthTemp[2]-543)."-".$BirthTemp[1]."-".$BirthTemp[0];
 	$permission=$_POST["permission"];
 	$hospcode=$_POST["hospcode"];
+	$PasswordN=$_POST["PasswordN"];
 	
 	
 	$AdminID=$_POST["AdminID"];
@@ -25,20 +26,38 @@
 		$FamilyName=$NameTemp[2];
 	}
 	
-	$query="
-		update	admin
-		set		CitizenID='$CitizenID',
-				Prefix='$Prefix',
-				PersonName='$PersonName',
-				GivenName='$GivenName',
-				MiddleName='$MiddleName',
-				FamilyName='$FamilyName',
-				Telephone='$Telephone',
-				Email='$Email',
-				BirthDate='$BirthDate',
-				permission='$permission'
-		where	AdminID='$AdminID'
-	";
+	if($PasswordN!=""){
+		$query="
+			update	admin
+			set		CitizenID='$CitizenID',
+					Prefix='$Prefix',
+					PersonName='$PersonName',
+					GivenName='$GivenName',
+					MiddleName='$MiddleName',
+					FamilyName='$FamilyName',
+					Telephone='$Telephone',
+					Email='$Email',
+					BirthDate='$BirthDate',
+					permission='$permission',
+					Password='".aesEncrypt($PasswordN)."'
+			where	AdminID='$AdminID'
+		";
+	}else{
+		$query="
+			update	admin
+			set		CitizenID='$CitizenID',
+					Prefix='$Prefix',
+					PersonName='$PersonName',
+					GivenName='$GivenName',
+					MiddleName='$MiddleName',
+					FamilyName='$FamilyName',
+					Telephone='$Telephone',
+					Email='$Email',
+					BirthDate='$BirthDate',
+					permission='$permission'
+			where	AdminID='$AdminID'
+		";
+	}
 	$result=mysql_query($query);
 	
 	$query="

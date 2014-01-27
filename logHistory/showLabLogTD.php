@@ -48,6 +48,7 @@
 	}
 	$result=mysql_query($query);
 	$numrows=mysql_num_rows($result);
+	$total=$numrows;
 	$pageCount=$numrows/$perPage;
 	if((int)$pageCount<$pageCount){
 		$pageCount=((int)$pageCount)+1;
@@ -161,7 +162,7 @@
 		}
 	?>
 	<tr>
-		<td class="table_header" colspan="8" style="text-align: right;padding: 5px;"><?php echo $numrows?> รายการ</td>
+		<td class="table_header" colspan="8" style="text-align: right;padding: 5px;"><?php echo number_format($total)?> รายการ</td>
 	</tr>
 </table><br>
 <input type="button" value=" Home " style="float: right;" onclick="window.open('../home','_self')">

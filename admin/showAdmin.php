@@ -223,6 +223,43 @@
 													<td class="form_input" id="ConfirmDate"></td>
 												</tr>
 												<tr>
+													<td colspan="2" style="font-weight: bold;padding-top: 10px;text-align: left">
+														บัญชีผู้ใช้ (เจ้าหน้าที่)
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">ชื่อผู้ใช้</td>
+													<td class="form_input">
+														<input type="text" class="nextFocus" next="regist_PasswordN" name="User" id="User"
+															onblur="
+																$.post('userCheck.php',{
+																		User: $('#User').val(),
+																		AdminID: $('#AdminID').val(),
+																		checkStatus: 'edit'
+																	},function(data){
+																		if(data=='found'){
+																			alert('ชื่อผู้ใช้ซ้ำ');
+																			$('#User').focus();
+																		}
+																	}
+																);
+															"
+														>
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">รหัสผ่านใหม่</td>
+													<td class="form_input">
+														<input type="password" class="nextFocus" next="PasswordC" name="PasswordN" id="PasswordN">
+													</td>
+												</tr>
+												<tr>
+													<td class="form_field">ยืนยันรหัสผ่าน</td>
+													<td class="form_input">
+														<input type="password" class="nextFocus" next="submitButton" name="PasswordC" id="PasswordC">
+													</td>
+												</tr>
+												<tr>
 													<td class="form_field">ตำแหน่ง</td>
 													<td class="form_input">
 														<select id="permission" name="permission">
@@ -263,7 +300,9 @@
 									var	Name=$('#Name').val();
 									var	Telephone=$('#Telephone').val();
 									var	Email=$('#Email').val();
-									var	Password=$('#Password').val();
+									var	User=$('#User').val();
+									var	PasswordN=$('#PasswordN').val();
+									var	PasswordC=$('#PasswordC').val();
 									
 									if(CitizenID==''){
 										alert('กรุณาระบุ CitizenID');
@@ -277,6 +316,12 @@
 									}else if(Email==''){
 										alert('กรุณากรอก อีเมล์');
 										$('#Email').focus();
+									}else if(User==''){
+										alert('กรุณากรอก ชื่อผู้ใช้');
+										$('#User').focus();
+									}else if(PasswordN!='' && (PasswordN!=PasswordC)){
+										alert('ยืนยันรหัสผ่านไม่ถูกต้อง');
+										$('#PasswordC').focus();
 									}else{
 										$.post('adminEdit.php',
 												$('#editForm').serialize()
@@ -321,6 +366,7 @@
 	";
 	$result=mysql_query($query);
 	$numrows=mysql_num_rows($result);
+	$total=$numrows;
 	$pageCount=$numrows/$perPage;
 	if((int)$pageCount<$pageCount){
 		$pageCount=((int)$pageCount)+1;
@@ -485,6 +531,6 @@
 		} 
 	?>
 	<tr>
-		<td class="table_header" colspan="7" style="text-align: right"><?php echo $numrows?> รายชื่อ</td>
+		<td class="table_header" colspan="7" style="text-align: right"><?php echo number_format($total)?> รายชื่อ</td>
 	</tr>
 </table>

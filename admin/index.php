@@ -109,6 +109,12 @@
 				<tr>
 					<td id="menu_logHistory" class="mainMenu_item">ประวัติการเข้าใช้ระบบ</td>
 				</tr>
+				<tr>
+					<td><hr></td>
+				</tr>
+				<tr>
+					<td class="mainMenu_item menu_logout">ออกจากระบบ</td>
+				</tr>
 			</table>
 		</td>
 		<td id="container" valign="top"></td>

@@ -57,7 +57,7 @@
 					<tr>
 						<td style="text-align: center;vertical-align: middle">
 							<img src="../img/history_lab.png" height="100"><br>
-							Lab Access History<br>(ประวัติการเข้าดูผลตรวจจากห้องปฏิบัติการ)
+							Lab Access History<br><div style="font-size: 80%;">(ประวัติการเข้าดูผลตรวจจากห้องปฏิบัติการ จากบุคคลภายนอก)</div>
 						</td>
 					</tr>
 				</table>

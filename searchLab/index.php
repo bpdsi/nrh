@@ -1,6 +1,7 @@
 <?php
 	$functionName="Lab Result (ผลการตรวจจากห้องปฏิบัติการ)";
 	include "../template/header.php";
+	$page=$_POST["page"];
 ?>
 <table class="noSpacing" style="width: 100%;height: 100%;">
 	<tr>
@@ -55,6 +56,16 @@
 			</form>
 			
 			<?php
+				$perPage=12;
+				if($page==""){
+					$page=1;
+				}
+				if($page==1){
+					$startRecord=0;
+				}else{
+					$startRecord=($page-1)*$perPage;
+				}
+				
 				if($StartDate!=""){
 					$tempDate=explode("/", $StartDate);	
 					$stDate=($tempDate[2]-543)."-".$tempDate[1]."-".$tempDate[0];				
@@ -108,6 +119,67 @@
 				}
 				
 				$result=mysql_query($query);
+				$numrows=mysql_num_rows($result);
+				$total=$numrows;
+				$pageCount=$numrows/$perPage;
+				if((int)$pageCount<$pageCount){
+					$pageCount=((int)$pageCount)+1;
+				}
+			?>
+			<table style="margin-left: auto;">
+				<tr>
+					<td align="right">
+						<?php
+							if($page>1){
+								?>
+									<form id="previousForm" method="post" action="index.php" style="float: left;">
+										<input type="hidden" name="StartDate" value="<?php echo $_POST["StartDate"]?>">
+										<input type="hidden" name="EndDate" value="<?php echo $_POST["EndDate"]?>">
+										<input type="hidden" name="page" value="<?php echo $page-1?>">
+										<div style="float: left;" class="pageButton"
+											onclick="$('#previousForm').submit()"
+										>&lt;</div>
+									</form>
+								<?php
+							}
+							for($i=1;$i<=$pageCount;$i++){
+								?>
+									<form id="pageForm<?php echo $i?>" method="post" action="index.php" style="float: left;">
+										<input type="hidden" name="StartDate" value="<?php echo $_POST["StartDate"]?>">
+										<input type="hidden" name="EndDate" value="<?php echo $_POST["EndDate"]?>">
+										<input type="hidden" name="page" value="<?php echo $i?>">
+										<div class="pageButton"
+											style="
+												float: left;
+												<?php
+													if($i==$page){
+														?>color: #b90000; font-weight: bold;<?php
+													}
+												?>
+											"
+											onclick="$('#pageForm<?php echo $i;?>').submit();"
+										><?php echo $i;?></div>
+									</form>
+								<?php
+							}
+							if($page<$pageCount){
+								?>
+									<form id="nextForm" method="post" action="index.php" style="float: left;">
+										<input type="hidden" name="StartDate" value="<?php echo $_POST["StartDate"]?>">
+										<input type="hidden" name="EndDate" value="<?php echo $_POST["EndDate"]?>">
+										<input type="hidden" name="page" value="<?php echo $page+1?>">
+										<div style="float: left;" class="pageButton"
+											onclick="$('#nextForm').submit()"
+										>&gt;</div>
+									</form>
+								<?php
+							}
+						?>
+					</td>
+				</tr>
+			</table>
+			<?php 
+				$result=mysql_query($query." limit	$startRecord,$perPage");
 				$numrows=mysql_num_rows($result);
 				if($numrows>0){
 					?>
@@ -321,10 +393,14 @@
 									$i++;
 								} 
 							?>
+							<tr>
+								<td colspan="7" class="table_header" style="text-align: right;padding: 5px;"><?php echo number_format($total)?> รายการ</td>
+							</tr>
 						</table>
 					<?php
 				}
 			?>
+			<br>
 			<input type="button" value=" Home " style="float: right;" onclick="window.open('../home','_self')">
 		</td>
 	</tr>
