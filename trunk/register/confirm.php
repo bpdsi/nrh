@@ -2,7 +2,6 @@
 	include "../function/functionPHP.php";
 
 	$AllowID=aesDecrypt(urldecode($_GET["key"]));
-	$AllowID=12;
 		
 	if($Hospital==""){
 		$Hospital=11470;
@@ -27,8 +26,8 @@
 		echo "Your request has been rejected";
 		exit();
 	}else if($row[AllowStatus]=="accepted"){
-		//echo "Your request has been accepted";
-		//exit();
+		echo "Your request has been accepted";
+		exit();
 	}
 	
 	$PersonalID=$row[PersonalID];

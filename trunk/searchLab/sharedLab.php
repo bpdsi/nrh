@@ -55,11 +55,19 @@
 		";
 		$result=mysql_query($query);
 		?>
-			<table>
-				<tr>
-					<td>ไม่สามารถแสดงผลการตรวจจากห้องปฏิบัติการได้</td>
-				</tr>
-			</table>
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+				</head>
+				<body>
+					<table>
+						<tr>
+							<td>ไม่สามารถแสดงผลการตรวจจากห้องปฏิบัติการได้</td>
+						</tr>
+					</table>
+				</body>
+			</html>
 		<?php
 		exit();
 	}
