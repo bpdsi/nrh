@@ -35,8 +35,6 @@
 ?>
 <script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
 <script type="text/javascript">
-	$(function(){
-		alert("Registration Complete");
-		window.open('../authen','_self');
-	});
+	alert("Registration Complete");
+	window.open('../authen','_self');
 </script>

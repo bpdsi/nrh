@@ -60,18 +60,31 @@
 		</style>
 	</head>
 	<body>
-		<table class="fullScreen noSpacing">
+		<div id="waitingDIV" 
+			style="
+				display: none;
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				background-image: url('../img/dark60.png');
+				z-index: 1000;
+			"
+		>
+			<table style="width: 100%;height: 100%;">
+				<tr>
+					<td style="vertical-align: middle;text-align: center;font-size:200%;color: #fff;">
+						<img src="../img/loading.gif"><br>
+						กรุณารอสักครู่
+					</td>
+				</tr>
+			</table>
+		</div>
+		<table class="fullScreen">
 			<tr>
 				<td style="width: auto;">&nbsp;</td>
 				<td style="width: 800px;background-color: #eee;">
-					<div style="width: 450px;margin-left: auto;margin-right: auto;margin-top: auto;margin-bottom: auto;padding: 0px;">
-						<table class="form" 
-							style="
-								width: 100%;
-								-webkit-box-shadow: 2px 2px 10px #aaa;
-								box-shadow: 2px 2px 5px #aaa;
-							"
-						>
+					<div class="form" style="width: 550px;margin-left: auto;margin-right: auto;margin-top: auto;margin-bottom: auto;padding: 0px;">
+						<table class="form" style="width: 100%;">
 							<tr>
 								<td class="form_header" colspan="2" style="font-weight: bold;">
 									<div id="titleDIV" style="float:left;">
@@ -88,7 +101,7 @@
 								<td class="form_body" align="center">
 									<table>
 										<tr>
-											<td colspan="2"><div style="float: right;font-size: 120%;">เข้าสู่ระบบ</div></td>
+											<td colspan="2"><div style="float: right;font-size: 120%;">ระบบกู้คืนรหัสผ่าน</div></td>
 										</tr>
 										<tr>
 											<td valign="top" align="center" style="width: 170px;">
@@ -127,12 +140,74 @@
 														</tr>
 														<tr><td colspan="2"><hr></td></tr>
 														<tr>
-															<td class="form_field">ชื่อผู้ใช้</td>
-															<td class="form_input"><input class="focus nextFocus" next="Password" type="text" id="User" name="User"></td>
+															<td class="form_field">หมายเลขบัตรประชาชน</td>
+															<td class="form_input"><input class="focus nextFocus" next="Password" type="text" id="CitizenID" name="CitizenID"></td>
 														</tr>
 														<tr>
-															<td class="form_field">รหัสผ่าน</td>
-															<td class="form_input"><input class="nextClick" next="submitButton" type="password" id="Password" name="Password"></td>
+															<td colspan="2" style="text-align: right">
+																<input type="button" value=" ตั้งรหัสผ่านใหม่ "
+																	onclick="
+																		$('#waitingDIV').fadeIn();
+																		$.post('forgetPasswordMSG.php',{
+																				CitizenID: $('#CitizenID').val(),
+																				system: $('#system').val()
+																			},function(message){
+																				$.post('sendForgetPasswordMail.php',{
+																						CitizenID: $('#CitizenID').val(),
+																						system: $('#system').val(),
+																						message: message
+																					},function(data){
+																						if(data=='complete'){
+																							$('#waitingDIV').fadeOut();
+																							$('#CitizenID').val('');
+																							alert('กรุณาตรวจสอบ Link สำหรับตั้งรหัสผ่านใหม่ในอิเมล์ของท่าน');
+																						}else{
+																							$('#waitingDIV').fadeOut();
+																							alert('ไม่สามารถกู้คืนรหัสผ่านได้');
+																						}
+																					}
+																				);
+																			}
+																		);
+																	"
+																>
+																<hr>
+															</td>
+														</tr>
+														<tr>
+															<td class="form_field">ชื่อผู้ใช้ระบบ</td>
+															<td class="form_input"><input class="nextClick" next="submitButton" type="text" id="User" name="User"></td>
+														</tr>
+														<tr>
+															<td colspan="2" style="text-align: right">
+																<input type="button" value=" ตั้งรหัสผ่านใหม่ "
+																	onclick="
+																		$('#waitingDIV').fadeIn();
+																		$.post('forgetPasswordMSG.php',{
+																				User: $('#User').val(),
+																				system: $('#system').val()
+																			},function(message){
+																				$.post('sendForgetPasswordMail.php',{
+																						User: $('#User').val(),
+																						system: $('#system').val(),
+																						message: message
+																					},function(data){
+																						if(data=='complete'){
+																							$('#waitingDIV').fadeOut();
+																							$('#User').val('')
+																							alert('กรุณาตรวจสอบ Link สำหรับตั้งรหัสผ่านใหม่ในอิเมล์ของท่าน');
+																						}else{
+																							$('#waitingDIV').fadeOut();
+																							alert('ไม่สามารถกู้คืนรหัสผ่านได้');
+																						}
+																					}
+																				);
+																			}
+																		);
+																	"
+																>
+																<hr>
+															</td>
 														</tr>
 													</table>
 												</form>
@@ -143,25 +218,8 @@
 							</tr>
 							<tr>
 								<td class="form_footer">
-									<input class="nprButton" type='reset' value="   ลืมรหัสผ่าน   " style="float: left;"
-										onclick="window.open('../forgetPassword','_self')"
-									>
-									<input class="nprButton" id="submitButton" type='submit' value="   เข้าสู่ระบบ   "
-										onclick="
-											var Username=$('#User').val();
-											var Password=$('#Password').val();
-											if(Username=='' || Password==''){
-												alert('กรุณากรอก Username และ Password');
-											}else{
-												if($('#system').val()=='healthDatabank'){
-													$('#authenticationForm').attr('action','authenSQL.php');
-													$('#authenticationForm').submit();
-												}else if($('#system').val()=='vaccination'){
-													$('#authenticationForm').attr('action','vc_authenSQL.php');
-													$('#authenticationForm').submit();
-												}
-											}
-										";
+									<input class="nprButton" type='reset' value="   ยกเลิก   " style="float: right;"
+										onclick="window.open('../authen','_self')"
 									>
 								</td>
 							</tr>

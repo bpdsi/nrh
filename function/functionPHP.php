@@ -3,7 +3,12 @@
 	$mainUrl=get_cfgValue("mainUrl");
 	require 'aes.class.php';
   	require 'aesctr.class.php';
-	require '../sendmail/phpMailer/class.phpmailer.php';  	
+  	if(is_file('../sendmail/phpMailer/class.phpmailer.php')){
+  		require '../sendmail/phpMailer/class.phpmailer.php';
+  	}else{
+  		require 'sendmail/phpMailer/class.phpmailer.php';
+  	}
+	  	
 	
   	function host($dbName){
 		global $host_db;
