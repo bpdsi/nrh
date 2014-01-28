@@ -140,7 +140,11 @@
 								</div>
 							</td>
 							<td style="vertical-align: top;">
-								<?php echo dateEncode($rowLab[LabDate])?>
+								<?php
+									if($rowLab[LabDate]!="0000-00-00 00:00:00"){
+										echo dateEncode($rowLab[LabDate]);
+									}
+								?>
 							</td>
 							<td style="vertical-align: top;">
 								<table>
@@ -244,7 +248,7 @@
 										<td><?php echo $uInfo[UniversalTestName]?></td>
 										<td><?php echo MethodName($uInfo[MethodID])?></td>
 										<td style="text-align: right;padding: 0px 20px 0px 20px;"><?php echo $rowLabResult[ResultLab]?></td>
-										<td style="text-align: center;padding: 0px 20px 0px 20px;"><?php echo UnitName($rowLabResult[UnitID])?></td>
+										<td style="text-align: center;padding: 0px 20px 0px 20px;"><?php echo UnitName($rowLabResult[UnitCode])?></td>
 										<td style="text-align: center;padding: 0px 20px 0px 20px;"><?php echo $rowLabResult[ReferenceResult]?></td>
 										<td style="text-align: right;padding: 0px 20px 0px 20px;"><?php echo $rowLabResult[ResultUniversal]?></td>
 										<td style="text-align: center;padding: 0px 20px 0px 20px;"><?php echo UnitName($rowLabResult[UnitUniversal])?></td>

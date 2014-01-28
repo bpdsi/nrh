@@ -563,6 +563,8 @@
 																									
 																									$('#BloodTypeRh').val(temp['BloodTypeRh']).attr('readonly','readonly').css('background-color','#eee');
 
+																									$('#Gender').val(temp['Gender']).attr('readonly','readonly').css('background-color','#eee');																									
+
 																									var birthTemp=temp['BirthDate'].split('-');
 																									$('#birthDateInputTR').hide();
 																									$('#birthDateTR').show();
@@ -590,6 +592,8 @@
 																							$('#BloodGroupABO').val('').removeAttr('readonly').css('background-color','');
 																							
 																							$('#BloodTypeRh').val('').removeAttr('readonly').css('background-color','');
+
+																							$('#Gender').val('').removeAttr('readonly').css('background-color','');
 																							
 
 																							$('#birthDateInputTR').show();
@@ -611,6 +615,7 @@
 																										$('#BloodTypeRh').val(aaa[9]);
 																										$('#HospitalNumber').val(aaa[10]);
 																										$('#CitizenID').val(aaa[11]);
+																										$('#Gender').val(aaa[12]);
 																									}else{
 																										alert('ไม่พบข้อมูลผู้ป่วย');
 																									}
@@ -660,6 +665,10 @@
 															<td class="form_input"><input type="text" class="nextFocus" next="BloodGroup" name="Email" id="Email"></td>
 														</tr>
 														<tr>
+															<td class="form_field">เพศ</td>
+															<td class="form_input"><input type="text" name="Gender" id="Gender" size="1" style="width: 15px;text-align: center"></td>
+														</tr>
+														<tr>
 															<td class="form_field">กรุ๊ปเลือด</td>
 															<td class="form_input">
 																<input type="text" class="nextFocus" next="BloodTypeRh" name="BloodGroupABO" id="BloodGroupABO" style="width: 50px;">
@@ -667,7 +676,7 @@
 																Rh <input type="text" class="nextFocus" next="PerDay" name="BloodTypeRh" id="BloodTypeRh" style="width: 50px;">
 															</td>
 														</tr>
-														<tr id="birthDateTR">
+														<tr id="birthDateTR" style="display: none;">
 															<td class="form_field">วันเดือนปีเกิด</td>
 															<td class="form_input" id="birthDateTD"></td>
 														</tr>
@@ -784,7 +793,7 @@
 												alert('กรุณากรอก ชื่อ-นามสกุล');
 											}else if(Telephone==''){
 												alert('กรุณากรอกหมายเลขโทรศัพท์');
-											}else if(Email==''){
+											}else if(Email=='' && confirmType=='email'){
 												alert('กรุณากรอก อีเมล์');
 											}else if(memberStatus=='current'){
 												$('#registForm').submit();

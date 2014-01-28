@@ -101,6 +101,8 @@
 	
 	$AllowDate=$_POST["AllowDate"];
 	
+	$Gender=$_POST["Gender"];
+	
 	$query="
 		select	*
 		from	person
@@ -123,7 +125,8 @@
 					BloodGroupABO,
 					BloodTypeRh,
 					Telephone,
-					Email
+					Email,
+					Gender
 				) values (
 					'$PersonalID',
 					'$CitizenID',
@@ -136,7 +139,8 @@
 					'$BloodGroupABO',
 					'$BloodTypeRh',
 					'$Telephone',
-					'$Email'
+					'$Email',
+					'$Gender'
 				)
 		";
 		$result=mysql_query($query) or die("<br>person<br>".mysql_error()."<br><pre>".$query);
