@@ -462,6 +462,7 @@
 											</td>
 											<td style="padding: 0px 10px 0px 10px;">
 												<form id="registForm" method="post" action="registerSQL.php" target="tempFrame">
+													<input type="hidden" name="memberStatus" id="memberStatus" value="new">
 													<table>
 														<tr>
 															<td class="form_field">โรงพยาบาล</td>
@@ -538,23 +539,72 @@
 																						HospCode: $('#Hospital').val(),
 																						HospitalNumber: $('#HospitalNumber').val()
 																					},function(data){
+																						$('#memberStatus').val(data);
 																						if(data=='current'){
-																							alert('HN นี้มีการสมัครเป็นสมาชิกของระบบแล้ว');
-																							$('#HospitalNumber').focus();
-																							$('#waitingDIV').fadeOut();
+																							alert('ผู้ขอใช้สิทธิ์เป็นสมาชิกของ Personal Health Databank');
+
+																							$.post('getPersonByHN.php',{
+																									HospCode: $('#Hospital').val(),
+																									HospitalNumber: $('#HospitalNumber').val()
+																								},function(data){
+																									var temp=$.parseJSON(data);
+
+																									$('#CitizenID').val(temp['CitizenID']).attr('readonly','readonly').css('background-color','#eee');
+																									
+																									$('#Prefix').val(temp['Prefix']).attr('readonly','readonly').css('background-color','#eee');
+																									
+																									$('#Name').val(temp['PersonName']).attr('readonly','readonly').css('background-color','#eee');
+																									
+																									$('#Telephone').val(temp['Telephone']).attr('readonly','readonly').css('background-color','#eee');
+																									
+																									$('#Email').val(temp['Email']).attr('readonly','readonly').css('background-color','#eee');
+																									
+																									$('#BloodGroupABO').val(temp['BloodGroupABO']).attr('readonly','readonly').css('background-color','#eee');
+																									
+																									$('#BloodTypeRh').val(temp['BloodTypeRh']).attr('readonly','readonly').css('background-color','#eee');
+
+																									var birthTemp=temp['BirthDate'].split('-');
+																									$('#birthDateInputTR').hide();
+																									$('#birthDateTR').show();
+																									$('#birthDateTD').html(birthTemp[2]+'/'+birthTemp[1]+'/'+(parseInt(birthTemp[0])+543));
+
+																									$('#waitingDIV').fadeOut();
+																								}
+																							);
+																							
+																							$('#CitizenID').attr('readonly','readonly');																							
+																							$('#confirmTypeTR').hide();
 																						}else if(data=='new'){
+																							$('#confirmTypeTR').show();
+
+																							$('#CitizenID').val('').removeAttr('readonly').css('background-color','');
+																							
+																							$('#Prefix').val('').removeAttr('readonly').css('background-color','');
+																							
+																							$('#Name').val('').removeAttr('readonly').css('background-color','');
+																							
+																							$('#Telephone').val('').removeAttr('readonly').css('background-color','');
+																							
+																							$('#Email').val('').removeAttr('readonly').css('background-color','');
+																							
+																							$('#BloodGroupABO').val('').removeAttr('readonly').css('background-color','');
+																							
+																							$('#BloodTypeRh').val('').removeAttr('readonly').css('background-color','');
+																							
+
+																							$('#birthDateInputTR').show();
+																							$('#birthDateTR').hide();
+																							
 																							$.post('get_patient2.php',{
 																									hospCode: $('#Hospital').val(),
 																									hospitalNumber: $('#HospitalNumber').val()
 																								},function(data){
-																									//alert(data);
 																									var aaa=data.split('::');
 																									if(aaa[1]!=''){
 																										$('#Prefix').val(aaa[0]);
 																										$('#Name').val(aaa[1]+' '+aaa[2]+' '+aaa[3]);
 																										var bd=aaa[4].split('-');
 																										$('#BirthDate').val(bd[2]+'/'+bd[1]+'/'+(parseInt(bd[0])+543));
-																										//$('#Gender').val(aaa[5]);
 																										$('#Telephone').val(aaa[6]);
 																										$('#Email').val(aaa[7]);
 																										$('#BloodGroupABO').val(aaa[8]);
@@ -606,7 +656,7 @@
 															<td class="form_input"><input type="text" class="nextFocus" next="Email" name="Telephone" id="Telephone"></td>
 														</tr>
 														<tr>
-															<td class="form_field">อิเมล์</td>
+															<td class="form_field">อีเมล์</td>
 															<td class="form_input"><input type="text" class="nextFocus" next="BloodGroup" name="Email" id="Email"></td>
 														</tr>
 														<tr>
@@ -617,7 +667,11 @@
 																Rh <input type="text" class="nextFocus" next="PerDay" name="BloodTypeRh" id="BloodTypeRh" style="width: 50px;">
 															</td>
 														</tr>
-														<tr>
+														<tr id="birthDateTR">
+															<td class="form_field">วันเดือนปีเกิด</td>
+															<td class="form_input" id="birthDateTD"></td>
+														</tr>
+														<tr id="birthDateInputTR">
 															<td class="form_field">วันเดือนปีเกิด</td>
 															<td class="form_input">
 																<input type="text" class="nextFocus date-pick" next="BloodTypeRh" name="BirthDate" id="BirthDate" size="10"
@@ -678,36 +732,12 @@
 																</select>
 															</td>
 														</tr>
-														<tr id="currentUserTR" style="display:none">
-															<td class="form_field">สถานะผู้ใช้งาน</td>
-															<td class="form_input">ผู้ใช้งานปัจจุบัน<input type="hidden" id="currentUser" name="currentUser" value="false"></td>
-														</tr>
 														<tr>
 															<td colspan="2"><hr /></td>
 														</tr>
 														<tr>
 															<td class="form_input" id="div_AllowStatus" colspan="2"></td>
 														</tr>
-														<!-- 
-															<tr>
-																<td colspan="2"><hr /></td>
-															</tr>
-															<tr>
-																<td class="form_field">User</td>
-																<td class="form_input">
-																	<input id="User" type="text" class="text-input" name="User" value="" />
-																</td>
-															</tr>
-															<tr>
-																<td class="form_field">Password</td>
-																<td class="form_input">
-																	<input id="Password" type="password" class="text-input password" name="Password" value=""
-																		size="8"
-																	/><input id="generate" class="link-password" type="button" value=" Generate Password " /><br>
-																	<div class="form-row text-right" id="random"></div>
-																</td>
-															</tr>
-														-->
 													</table>
 												</form>
 											</td>
@@ -727,12 +757,7 @@
 							<tr>
 								<td class="form_footer">
 									<input class="nprButton" id="homeButton" type='reset' value="   กลับสู่หน้าหลัก   " style="float: left;"
-										onclick="
-											/*var HospitalName=$('#HospitalName').val();
-											$('#registForm')[0].reset();
-											$('#HospitalName').val(HospitalName);*/
-											window.open('../admin','_self');
-										"
+										onclick="window.open('../admin','_self');"
 									>
 									<input id="submitButton" class="nprButton" type='submit' value="   บันทึก   "
 										onclick="
@@ -747,7 +772,7 @@
 											var	User=$('#User').val();
 											var	Password=$('#Password').val();
 											var confirmType=$('#confirmType').val();
-											var currentUser=$('#currentUser').val();
+											var memberStatus=$('#memberStatus').val();
 											
 											if(Hospital==''){
 												alert('กรุณาระบุโรงพยาบาล');
@@ -761,13 +786,10 @@
 												alert('กรุณากรอกหมายเลขโทรศัพท์');
 											}else if(Email==''){
 												alert('กรุณากรอก อีเมล์');
+											}else if(memberStatus=='current'){
+												$('#registForm').submit();
 											}else if(confirmType=='email'){
 												$('#waitingDIV').fadeIn(function(){
-													$('#registForm').submit();
-												});
-											}else if(currentUser=='true'){
-												$('#waitingDIV').fadeIn(function(){
-													$('#registForm').attr('action','registerSQL.php');
 													$('#registForm').submit();
 												});
 											}else if(confirmType=='document'){

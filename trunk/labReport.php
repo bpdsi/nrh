@@ -415,37 +415,11 @@
 		$string.="<table border=1 cellspacing=0 cellpadding=0>";//.count($params);
 		$string.=$DocumentIDx;
 		
-		$string.=$patient.$labResult.$universalTestNamex.$LabResultDetail;
+		//$string.=$patient.$labResult.$universalTestNamex.$LabResultDetail;
+		$string="Insert Complete";
 		
 		
-		/*$i=0;
-		foreach ($params as $v1 => $value) {
-		$i++;
-			if(is_array($value)){
-				//$string.="$i.Array";
-				foreach ($value as $key => $valx) {
-					if(is_array($valx)){
-						foreach ($valx as $key2 => $valx2) {
-							if(is_array($valx2)){
-								$string.="<tr><td>".$key2."</td><td></td><td></td></tr>";
-								foreach ($valx2 as $key3 => $valx3) {
-									$string.="<tr><td>-</td><td>$i.".$key3."</td><td>".$valx3."</td></tr>";
-								}
-							}else{
-								//$valstring=iconv("tis-620","tis-620",$valx2);
-								$valstring=iconv("utf-8","tis-620",$valx2);
-								$string.="<tr><td>x$i.".$key2."</td><td>x".$valstring."</td></tr>";
-							}
-						}
-					}else{
-						$string.="<tr><td>s$i.".$key."</td><td>".$valx."</td></tr>";
-					}
-				}
-			}else{
-				$string.="<tr><td>$i.".$v1."</td><td>".$value."</td></tr>";
-			}
-		}*/
-		$string.="</table>";
+		//$string.="</table>";
 		//$string.=$params;
 		return $string;
 	}

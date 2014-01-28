@@ -8,6 +8,58 @@
 	$Hospital=$_POST["Hospital"];
 	$HospitalName=$_POST["HospitalName"];
 	
+	if($_POST["memberStatus"]=='current'){
+		$AllowType=$_POST["AllowType"];
+		$AllowDate=$_POST["AllowDate"];
+		$HospitalNumber=$_POST["HospitalNumber"];
+		
+		$query="
+			select	*
+			from	hospital_patient
+			where	HospCode='$Hospital' and
+					HospitalNumber='$HospitalNumber'
+		";
+		$result=mysql_query($query);
+		$row=mysql_fetch_array($result);
+		$PersonalID=$row[PersonalID];
+		
+		$query="
+			update	person_allow
+			set		AllowStatus='expired'
+			where	PersonalID='$PersonalID'
+		";
+		$result=mysql_query($query);
+		
+		$AllowID=newAllowID();
+		
+		$query="
+			insert into	person_allow
+				(
+					AllowID,
+					PersonalID,
+					HospCode,
+					AllowType,
+					AllowDate,
+					AllowStatus
+				) values (
+					'$AllowID',
+					'$PersonalID',
+					'$Hospital',
+					'$AllowType',
+					CURRENT_TIMESTAMP,
+					'accepted'
+				)
+		";
+		$result=mysql_query($query);
+		?>
+			<script>
+				alert("บันทึกวิธีการยืนยันสิทธิ์เรียบร้อย");
+				window.parent.open('../admin','_self');
+			</script>
+		<?php
+		exit();
+	}
+	
 	$query="
 		select	*
 		from	hospital
