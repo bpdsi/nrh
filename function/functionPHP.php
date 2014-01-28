@@ -262,12 +262,12 @@
 		return $row[MethodName];
 	}
 	
-	function UnitName($UnitID){
+	function UnitName($UnitCode){
 		host("nrh");
 		$query="
 			select	UnitName
 			from	unit
-			where	UnitID='$UnitID'
+			where	UnitCode='$UnitCode'
 		";
 		$result=mysql_query($query);
 		$row=mysql_fetch_array($result);

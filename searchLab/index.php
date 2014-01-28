@@ -336,11 +336,15 @@
 												VN : <b><?php echo $row[VisitingNumber]?></b>
 											</td>
 											<td class="table_detail bottom_solid" colspan="3" align="center" style="background-color: #99C27E">
-												<?php echo dateEncode($row[LabDate])?>
+												<?php
+													if($row[LabDate]!="0000-00-00 00:00:00"){
+														echo dateEncode($row[LabDate]);
+													}
+												?>
 											</td>
 											<td class="table_detail bottom_solid" colspan="3" style="text-align: right;background-color: #99C27E">
 												<?php echo HospitalName($row[HospCode])." ($row[HospCode])"?>
-												<input type="button" value="  Print  " onclick="window.open('printLab.php?VisitingNumber=<?php echo $row[VisitingNumber];?>')">
+												<input type="button" value="  Print  " onclick="window.open('printLab.php?LabTestID=<?php echo $row[LabTestID];?>')">
 												<input type="button" value="  แบ่งปันผล Lab  " 
 													onclick="
 														$('#shareDIV').css('top',$(this).position().top);
@@ -394,7 +398,10 @@
 								} 
 							?>
 							<tr>
-								<td colspan="7" class="table_header" style="text-align: right;padding: 5px;"><?php echo number_format($total)?> รายการ</td>
+								<td colspan="7" class="table_header" style="text-align: right;padding: 5px;">
+									<div style="float: left;">ผลการตรวจจากห้องปฏิบะติการทั้งหมด <?php echo number_format($total)?> รายการ</div>
+									<div style="float: right">แสดงผล <?php echo $perPage;?> รายการ   (หน้า <?php echo $page?>/<?php echo $pageCount?>)</div>
+								</td>
 							</tr>
 						</table>
 					<?php

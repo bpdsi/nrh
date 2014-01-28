@@ -49,6 +49,8 @@
 	
 	$AllowDate=$_POST["AllowDate"];
 	
+	$Gender=$_POST["Gender"];
+	
 	$query="
 		select	*
 		from	person
@@ -77,7 +79,8 @@
 					Telephone,
 					Email,
 					User,
-					Password
+					Password,
+					Gender
 				) values (
 					'$PersonalID',
 					'$CitizenID',
@@ -92,7 +95,8 @@
 					'$Telephone',
 					'$Email',
 					'LAB".$PersonalID."',
-					'".aesEncrypt($genPassword)."'
+					'".aesEncrypt($genPassword)."',
+					'$Gender'
 				)
 		";
 		$result=mysql_query($query) or die("<br>person<br>".mysql_error()."<br><pre>".$query);
@@ -161,5 +165,6 @@
 	//header("location:createDocument.php?code=".(aesEncrypt($PersonalID))."&code1=".(aesEncrypt($Hospital))."&code2=".(aesEncrypt($AllowID)));
 ?>
 <script type="text/javascript">
-	window.parent.open("createDocument.php?code=<?php echo (aesEncrypt($PersonalID));?>&code1=<?php echo (aesEncrypt($Hospital))?>&code2=<?php echo (aesEncrypt($AllowID))?>");
+	window.parent.open("createDocument.php?code=<?php echo (aesEncrypt($PersonalID));?>&code1=<?php echo (aesEncrypt($Hospital))?>&code2=<?php echo (aesEncrypt($AllowID))?>","_blank");
+	window.parent.open("../admin","_self");
 </script>
