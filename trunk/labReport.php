@@ -40,7 +40,7 @@
 		}
 	}
 	function checkWard($WardName, $HospCode){
-		if($LabName!=""){
+		if($WardName!=""){
 			$sqlCheck="select WardID, WardName from ward where WardName='$WardName' and HospCode='$HospCode'";
 			$rCheck=mysql_query($sqlCheck)or die(mysql_error()."<br>".$sqlCheck);
 			$rowCheck=mysql_fetch_array($rCheck);

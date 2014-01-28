@@ -414,11 +414,21 @@
 		}
 		
 		function getUpperCase(){
-			return chr(rand(65, 90));
+			$temp=chr(rand(65, 90));
+			if($temp=="I"){
+				return "A";
+			}else{
+				return $temp;
+			}
 		}
 		
 		function getLowerCase(){
-			return chr(rand(97, 122));
+			$temp=chr(rand(97, 122));
+			if($temp=="l"){
+				return "a";
+			}else{
+				return $temp;
+			}
 		}
 		
 		for($i=0;$i<$length;$i++){

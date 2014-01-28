@@ -158,5 +158,8 @@
 	";
 	$result=mysql_query($query) or die("<br>person_allow<br>".mysql_error()."<br><pre>".$query);
 	
-	header("location:createDocument.php?code=".(aesEncrypt($PersonalID))."&code1=".(aesEncrypt($Hospital))."&code2=".(aesEncrypt($AllowID)));
+	//header("location:createDocument.php?code=".(aesEncrypt($PersonalID))."&code1=".(aesEncrypt($Hospital))."&code2=".(aesEncrypt($AllowID)));
 ?>
+<script type="text/javascript">
+	window.parent.open("createDocument.php?code=<?php echo (aesEncrypt($PersonalID));?>&code1=<?php echo (aesEncrypt($Hospital))?>&code2=<?php echo (aesEncrypt($AllowID))?>");
+</script>

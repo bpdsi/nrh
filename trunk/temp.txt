@@ -25,4 +25,4 @@
 						left join  lab_test_result on lab_test.VisitingNumber=lab_test_result.VisitingNumber
 		 where person.CitizenID='3809900560555'  
 			order by	lab_test.LabDate desc
-		------------------------------------------------------------Numrows : 4
+		------------------------------------------------------------Numrows : 6
