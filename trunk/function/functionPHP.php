@@ -320,6 +320,19 @@
 		
 		return $dayNum." ".monNameTH($monNum)." ".$yearNum." ".$time;
 	}
+        
+        function dateEncodeBE($date){
+		$temp=explode(" ", $date);
+		$date=$temp[0];
+		$time=$temp[1];
+		
+		$temp=explode("-", $date);
+		$yearNum=$temp[0]+543;
+		$monNum=$temp[1];
+		$dayNum=$temp[2];
+		
+		return $dayNum." ".monNameTH($monNum)." ".$yearNum." ".$time;
+	}
 	
 	function noCache(){
 		header("Cache-Control: no-cache, must-revalidate");

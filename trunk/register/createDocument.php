@@ -1,9 +1,10 @@
 <?php
 	include "../function/functionPHP.php";
 	host("nrh");
-	$PersonalID=aesDecrypt($_GET["code"]);
-	$HospCode=aesDecrypt($_GET["code1"]);
-	$AllowID=aesDecrypt($_GET["code2"]);
+        
+        $PersonalID=  aesDecrypt(str_replace(" ", "+", $_GET["code"]));
+        $HospCode=  aesDecrypt(str_replace(" ", "+", $_GET["code1"]));
+        $AllowID=  aesDecrypt(str_replace(" ", "+", $_GET["code2"]));
 
 	$queryPerson="
 		select	*
@@ -93,8 +94,8 @@
 				<td class="solid">
 					<table style="width: 100%;">
 						<tr>
-							<td class="nrhHeader">NRH Databank</td>
-							<td class="docName">เอกสารขอใช้สิทธิ์....</td>
+							<td class="nrhHeader">Personal Health Databank</td>
+							<td class="docName">เอกสารขอใช้สิทธิ์</td>
 						</tr>
 					</table>
 				</td>
@@ -122,7 +123,7 @@
 							<td class="form_data"><?php
 								if($rowAllow[AllowType]=="Perday"){
 									echo "เฉพาะวันที่ ".dateEncode($rowAllow[AllowDate]);
-								}else if($AllowType=="Unconditioned"){
+								}else if($rowAllow[AllowType]=="Unconditioned"){
 									echo "ตั้งแต่วันที่ ".dateEncode($rowAllow[AllowDate]);
 								}
 							?></td>

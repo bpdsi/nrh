@@ -80,10 +80,15 @@
 							select		*
 							from		lab_test
 							where		PersonalID='$person[PersonalID]' and
+                                                                            (
 										(
 											left(LabDate,10)>='$stDate' and
 											left(LabDate,10)<='$enDate'
-										)
+										) or (
+                                                                                        left(EffectiveTime,10)>='$stDate' and
+											left(EffectiveTime,10)<='$enDate'
+                                                                                )
+                                                                            )
 							order by	LabDate desc
 						";
 					}else{
@@ -91,9 +96,13 @@
 							select		*
 							from		lab_test
 							where		PersonalID='$person[PersonalID]' and
+                                                                            (
 										(
 											left(LabDate,10)='$stDate'
-										)
+										) or (
+                                                                                        left(Effective,10)='$stDate'
+                                                                                )
+                                                                            )
 							order by	LabDate desc
 						";
 					}
@@ -103,9 +112,13 @@
 							select		*
 							from		lab_test
 							where		PersonalID='$person[PersonalID]' and
+                                                                            (
 										(
 											left(LabDate,10)='$enDate'
-										)
+										) or (
+                                                                                	left(EffectiveTime,10)='$enDate'
+                                                                                )
+                                                                            )
 							order by	LabDate desc
 						";
 					}else{
@@ -117,7 +130,6 @@
 						";
 					}
 				}
-				
 				$result=mysql_query($query);
 				$numrows=mysql_num_rows($result);
 				$total=$numrows;
@@ -333,13 +345,17 @@
 									?>
 										<tr>
 											<td class="table_detail bottom_solid" style="background-color: #99C27E">
-												VN : <b><?php echo $row[VisitingNumber]?></b>
+                                                                                            VN : <b><?php echo $row[VisitingNumber]?></b><br>
+                                                                                            DOCID : <?php echo $row[LabTestID]?><br>
+                                                                                            VERSION : <?php echo $row[versionNumber]?>
 											</td>
 											<td class="table_detail bottom_solid" colspan="3" align="center" style="background-color: #99C27E">
 												<?php
 													if($row[LabDate]!="0000-00-00 00:00:00"){
-														echo dateEncode($row[LabDate]);
-													}
+														echo dateEncodeBE($row[LabDate])."<br><div style='float: right;font-size: 80%'> (วันที่สั่งตรวจ)</div>";;
+                                                                                                        }else{
+                                                                                                                echo dateEncodeBE($row[EffectiveTime])."<br><div style='float: right;font-size: 80%'> (ปรับปรุงผลล่าสุด)</div>";
+                                                                                                        }
 												?>
 											</td>
 											<td class="table_detail bottom_solid" colspan="3" style="text-align: right;background-color: #99C27E">
@@ -399,8 +415,8 @@
 							?>
 							<tr>
 								<td colspan="7" class="table_header" style="text-align: right;padding: 5px;">
-									<div style="float: left;">ผลการตรวจจากห้องปฏิบะติการทั้งหมด <?php echo number_format($total)?> รายการ</div>
-									<div style="float: right">แสดงผล <?php echo $perPage;?> รายการ   (หน้า <?php echo $page?>/<?php echo $pageCount?>)</div>
+									<div style="float: left;">ผลการตรวจจากห้องปฏิบัติการทั้งหมด <?php echo number_format($total)?> รายการ</div>
+									<div style="float: right">หน้า <?php echo $page?>/<?php echo $pageCount?></div>
 								</td>
 							</tr>
 						</table>

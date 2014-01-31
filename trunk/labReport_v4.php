@@ -111,8 +111,8 @@
 	}
 	//echo checkUnit("mg/dl");
 	function checkUTest($UniversalTestName,$MethodID, $HospCode){
-		global $errorCheck;
-		$errorCheck.="<br>checkUtest value check:".$UniversalTestName;
+	global $errorCheck;
+		$errorCheck.="checkUtest value check:".$UniversalTestName;
 		if($UniversalTestName!=""){
 			$sqlCheck="select UniversalTestID, UniversalTestName from utest 
 						where UniversalTestName='$UniversalTestName' and HospCode='$HospCode'";
@@ -185,7 +185,6 @@
 		//=============== Parse Patient Element ===================
 		$DocumentID=$params["SetId"]["!extension"];
 		$versionNumber=$params["VersionNumber"]["!value"];
-		$EffectiveTime=$params["EffectiveTime"]["!value"];
 		
 		$DocumentIDx.="<tr><td>Document</td><td>".$DocumentID."</td></tr>";
 		$DocumentIDx.="<tr><td>Document</td><td>".$versionNumber."</td></tr>";
@@ -285,62 +284,98 @@
 			}
 			$universalTestNamex.="<tr><td>rr</td><td>".$LabTestID_Old."::".$versionNumber_Old."</td></tr>";
 			$resultCheck="";
-			//$universalTestNamexx.="1".$LabTestID_Old."2".$LabTestID."3".$versionNumber;
 			if(trim($LabTestID_Old)==""){
-				//$EffectiveTimeA=split("T",$EffectiveTime);
-				$sqlInsertlab_test="insert into lab_test(LabTestID, versionNumber, PersonalID, VisitingNumber, HospCode, StaffID, WardID, LabCode, LabDate, EffectiveTime)values('$LabTestID', '$versionNumber', $PersonalID, '$VisitingNumber', '$HospCode', $StaffID, $WardID, $LabCode, '$LabDate', '$EffectiveTime')";
+				$sqlInsertlab_test="insert into lab_test(LabTestID, versionNumber, PersonalID, VisitingNumber, HospCode, StaffID, WardID, LabCode, LabDate)values('$LabTestID', '$versionNumber', $PersonalID, '$VisitingNumber', '$HospCode', $StaffID, $WardID, $LabCode, '$LabDate')";
 				$universalTestNamex.="<tr><td>Insert Lab Request</td><td>".$sqlInsertlab_test."</td></tr>";
 				mysql_query($sqlInsertlab_test)or die(mysql_error());
 				$resultCheck="insert";
 			}else{
-				if(trim($LabTestID_Old)==trim($LabTestID) and trim($versionNumber_Old)!=trim($versionNumber)){
-					//$EffectiveTimeA=split("T",$EffectiveTime);
-					$sqlInsertlab_test="update lab_test set versionNumber='$versionNumber', StaffID=$StaffID, WardID=$WardID, LabCode=$LabCode, LabDate='$LabDate', EffectiveTime='$EffectiveTime' where LabTestID='$LabTestID'";
-					$universalTestNamexx.="<tr><td>Update Lab Request</td><td>".$sqlInsertlab_test."</td></tr>";
+				if(trim($LabTestID_Old)==$LabTestID and trim($versionNumber_Old)!=$versionNumber){
+					$sqlInsertlab_test="update lab_test set versionNumber='$versionNumber', StaffID=$StaffID, WardID=$WardID, LabCode=$LabCode, LabDate='$LabDate' where LabTestID='$LabTestID'";
 					$universalTestNamex.="<tr><td>Update Lab Request</td><td>".$sqlInsertlab_test."</td></tr>";
 					mysql_query($sqlInsertlab_test)or die(mysql_error());
 				}
 				$resultCheck="update";
 			}
-			//$universalTestNamexx.="<tr><td>Lab Request Manage</td><td>".$sqlInsertlab_test."</td></tr>";
-			$universalTestNamex.="<tr><td>Lab Request Manage</td><td>".$sqlInsertlab_test."</td></tr>";
+			//$universalTestNamex.="<tr><td>Lab Request Manage</td><td>".$sqlInsertlab_test."</td></tr>";
 		//=========== Finsih Lab Request Insert ==============	
 		//$universalTestNamex="";
 		$universalTestNamex.="<tr><td>Count Result Detail</td><td>".count($LabDetail)."</td></tr>";
-		/*if(count($LabDetail)==14)$numLab=1;
-		else $numLab=count($LabDetail);*/
-		$numLab=count($LabDetail);
-		if(count($LabDetail)==14){
-			$i=0;
-			$LabResultDetail="";
-			foreach ($LabDetail as $v1 => $value) {
-			$LabResultDetail.="<tr><td colspan='2' bgcolor='blue'>Lab no ".$i."</td></tr>";
-			$i++;
-				if(is_array($value)){
-					foreach ($value as $key => $valx) {
-						if(is_array($valx)){
-							foreach ($valx as $key2 => $valx2) {
-								if(is_array($valx2)){
-									$LabResultDetail.="<tr><td>".$key2."</td><td></td></tr>";
-									foreach ($valx2 as $key3 => $valx3) {
-										$LabResultDetail.="<tr><td>$i.".$key3."</td><td>".$valx3."</td></tr>";
-										$dataResult[$i]=$valx3;
-									}
-								}else{
-									$valstring=$valx2;//iconv("utf-8","utf-8",$valx2);
-									$LabResultDetail.="<tr><td>x$i.".$key2."</td><td>x".$valstring."</td></tr>";
-									$dataResult[$i]=$valstring;
+		if(count($LabDetail)==14)$numLab=1;
+		else $numLab=count($LabDetail);
+		for($n=0;$n<$numLab;$n++){
+			$LabDetailA=$LabDetail[$n];
+			
+			//===========Lab Result Detail ==============
+			$LabReporterx=$LabDetailA["LabReporter"]["CitizenID"];
+			$UniversalTestName=$LabDetailA["UniversalTestName"];
+			$errorCheck.=" UUUU:=".$UniversalTestName;
+			$MethodName=$LabDetailA["MethodName"];
+			$UnitID=$LabDetailA["UnitID"];
+			$UnitName=$LabDetailA["UnitName"];
+			$LabResultDate=$LabDetailA["LabResultDate"]; 
+			$ResultLab=$LabDetailA["ResultTest"]; 
+			$ReferenceResultTest=$LabDetailA["ReferenceResultTest"];
+			$ResultUniversal=$LabDetailA["ResultUniversal"];
+			$ReferenceUniversal=$LabDetailA["ReferenceUniversal"];
+			$UnitUniversal=$LabDetailA["UnitUniversal"];
+			$LabTestID=$DocumentID;
+			$VisitingNumber=$VisitingNumber;
+			$HospCode=$HospCode;
+			$MethodID=checkMethod($MethodName);
+			$errorCheck.=" method:".$MethodName." Unival".$UniversalTestName;
+			$UniversalTestID=checkUTest($UniversalTestName,$MethodID,$HospCode);
+			$StaffID=checkPerson($ReporterCitizenID);
+		
+			
+			$UnitCode=checkUnit($UnitID, $UnitName,$HospCode);
+			if($UnitCode=="")$UnitCode=0;
+			$UnitUniversal=checkUnit("",$UnitUniversal,$HospCode);
+			$ReferenceUniversalTest="";
+			$LabReporter=checkStaff($LabReporterx);
+			if($LabReporter=="")$LabReporter=0;
+			
+			if(trim($UnitUniversal)=="")$UnitUniversal="Null";
+			if($resultCheck=="insert"){
+				$sqlInsertlab_test_result="insert into lab_test_result(LabTestID, VisitingNumber, HospCode, UniversalTestID, ResultLab, UnitCode, ReferenceResult, ResultUniversal, UnitUniversal, ReferenceUniversalTest, LabResultDate, LabReporter)values('$LabTestID', '$VisitingNumber', '$HospCode', $UniversalTestID, '$ResultLab', $UnitCode, '$ReferenceResult', '$ResultUniversal', $UnitUniversal, '$ReferenceUniversalTest', '$LabResultDate', $LabReporter)";
+			}elseif($resultCheck=="update"){
+				$sqlInsertlab_test_result="update lab_test_result set VisitingNumber='$VisitingNumber', ResultLab='$ResultLab', UnitCode=$UnitCode, ReferenceResult='$ReferenceResult', ResultUniversal='$ResultUniversal', UnitUniversal=$UnitUniversal, ReferenceUniversalTest='$ReferenceUniversalTest', LabResultDate='$LabResultDate', LabReporter=$LabReporter where LabTestID='$LabTestID' and UniversalTestID=$UniversalTestID and HospCode='$HospCode'";
+			}
+			$universalTestNamex.="<tr><td>Lab Result Detail Manage</td><td>".$sqlInsertlab_test_result."</td></tr>";
+			mysql_query($sqlInsertlab_test_result)or die(mysql_error()."<br>".$sqlInsertlab_test_result);
+		}
+		
+		$i=0;
+		$LabResultDetail="";
+		
+		foreach ($LabDetail as $v1 => $value) {
+		$LabResultDetail.="<tr><td colspan='2' bgcolor='blue'>Lab no ".$i."</td></tr>";
+		$i++;
+			$dataResult=array();
+			if(is_array($value)){
+				foreach ($value as $key => $valx) {
+					if(is_array($valx)){
+						foreach ($valx as $key2 => $valx2) {
+							if(is_array($valx2)){
+								$LabResultDetail.="<tr><td>".$key2."</td><td></td></tr>";
+								foreach ($valx2 as $key3 => $valx3) {
+									$LabResultDetail.="<tr><td>$i.".$key3."</td><td>".$valx3."</td></tr>";
+									$dataResult[$i]=$valx3;
 								}
+							}else{
+								$valstring=iconv("utf-8","tis-620",$valx2);
+								$LabResultDetail.="<tr><td>x$i.".$key2."</td><td>x".$valstring."</td></tr>";
+								$dataResult[$i]=$valstring;
 							}
-						}else{
-							$LabResultDetail.="<tr><td>s$i.".$key."</td><td>".$valx."</td></tr>";
-							$dataResult[$i]=$valx;
 						}
+					}else{
+						$LabResultDetail.="<tr><td>s$i.".$key."</td><td>".$valx."</td></tr>";
+						$dataResult[$i]=$valx;
 					}
-				}else{
-					$LabResultDetail.="<tr><td>$i.".$v1."</td><td>".$value."</td></tr>";
-					$dataResult[$i]=$value;
 				}
+			}else{
+				$LabResultDetail.="<tr><td>$i.".$v1."</td><td>".$value."</td></tr>";
+				$dataResult[$i]=$value;
 			}
 			$LabReporterx=$LabDetailA["LabReporter"]["CitizenID"];
 			$UniversalTestName=$dataResult[3];
@@ -349,8 +384,6 @@
 			$UnitID=$dataResult[8];
 			$UnitName=$dataResult[9];
 			$LabResultDate=$dataResult[10]; 
-			$ee=mb_detect_encoding($dataResult[6]);
-			//$ResultLab=iconv("utf-8","tis-620",$dataResult[6]); 
 			$ResultLab=$dataResult[6]; 
 			$ReferenceResultTest=$dataResult[12];
 			$ResultUniversal=$dataResult[11];
@@ -374,84 +407,13 @@
 			
 			if(trim($UnitUniversal)=="")$UnitUniversal="Null";
 			if($resultCheck=="insert"){
-				$sqlInsertlab_test_result="insert into lab_test_result(LabTestID, VisitingNumber, HospCode, UniversalTestID, ResultLab, UnitCode, ReferenceResult, ResultUniversal, UnitUniversal, ReferenceUniversalTest, LabResultDate, LabReporter)values('$LabTestID', '$VisitingNumber', '$HospCode', $UniversalTestID, '".$ResultLab."', $UnitCode, '$ReferenceResult', '$ResultUniversal', $UnitUniversal, '$ReferenceUniversalTest', '$LabResultDate', $LabReporter)";
+				$sqlInsertlab_test_result="insert into lab_test_result(LabTestID, VisitingNumber, HospCode, UniversalTestID, ResultLab, UnitCode, ReferenceResult, ResultUniversal, UnitUniversal, ReferenceUniversalTest, LabResultDate, LabReporter)values('$LabTestID', '$VisitingNumber', '$HospCode', $UniversalTestID, '$ResultLab', $UnitCode, '$ReferenceResult', '$ResultUniversal', $UnitUniversal, '$ReferenceUniversalTest', '$LabResultDate', $LabReporter)";
 			}elseif($resultCheck=="update"){
 				$sqlInsertlab_test_result="update lab_test_result set VisitingNumber='$VisitingNumber', ResultLab='$ResultLab', UnitCode=$UnitCode, ReferenceResult='$ReferenceResult', ResultUniversal='$ResultUniversal', UnitUniversal=$UnitUniversal, ReferenceUniversalTest='$ReferenceUniversalTest', LabResultDate='$LabResultDate', LabReporter=$LabReporter where LabTestID='$LabTestID' and UniversalTestID=$UniversalTestID and HospCode='$HospCode'";
 			}
-			$universalTestNamexx.="<tr><td>Lab Result Detail Manage New</td><td>".$sqlInsertlab_test_result."<br>".$ee."<br>".$ee2."</td></tr>";
+			$universalTestNamex.="<tr><td>Lab Result Detail Manage New</td><td>".$sqlInsertlab_test_result."</td></tr>";
 			mysql_query($sqlInsertlab_test_result)or die(mysql_error()."<br>".$sqlInsertlab_test_result);
-
-		}else{
-			for($n=0;$n<$numLab;$n++){
-				$LabDetailA=$LabDetail[$n];
-				
-				//===========Lab Result Detail ==============
-				$LabReporterx=$LabDetailA["LabReporter"]["CitizenID"];
-				$UniversalTestName=$LabDetailA["UniversalTestName"];
-				$MethodName=$LabDetailA["MethodName"];
-				$UnitID=$LabDetailA["UnitID"];
-				$UnitName=$LabDetailA["UnitName"];
-				$LabResultDate=$LabDetailA["LabResultDate"]; 
-				$ee2=mb_detect_encoding($LabDetailA["ResultTest"]);
-				//$ResultLab=iconv("utf-8","tis-620",$LabDetailA["ResultTest"]); 
-				$ResultLab=$LabDetailA["ResultTest"]; 
-				$ReferenceResultTest=$LabDetailA["ReferenceResultTest"];
-				$ResultUniversal=$LabDetailA["ResultUniversal"];
-				$ReferenceUniversal=$LabDetailA["ReferenceUniversal"];
-				$UnitUniversal=$LabDetailA["UnitUniversal"];
-				$LabTestID=$DocumentID;
-				$VisitingNumber=$VisitingNumber;
-				$HospCode=$HospCode;
-				$MethodID=checkMethod($MethodName);
-				$UniversalTestID=checkUTest($UniversalTestName,$MethodID,$HospCode);
-				$StaffID=checkPerson($ReporterCitizenID);
-			
-				
-				$UnitCode=checkUnit($UnitID, $UnitName,$HospCode);
-				if($UnitCode=="")$UnitCode=0;
-				$UnitUniversal=checkUnit("",$UnitUniversal,$HospCode);
-				$ReferenceUniversalTest="";
-				$LabReporter=checkStaff($LabReporterx);
-				if($LabReporter=="")$LabReporter=0;
-				
-				if(trim($UnitUniversal)=="")$UnitUniversal="Null";
-				if($resultCheck=="insert"){
-					$sqlInsertlab_test_result="insert into lab_test_result(LabTestID, VisitingNumber, HospCode, UniversalTestID, ResultLab, UnitCode, ReferenceResult, ResultUniversal, UnitUniversal, ReferenceUniversalTest, LabResultDate, LabReporter)values('$LabTestID', '$VisitingNumber', '$HospCode', $UniversalTestID, '".$ResultLab."', $UnitCode, '$ReferenceResult', '$ResultUniversal', $UnitUniversal, '$ReferenceUniversalTest', '$LabResultDate', $LabReporter)";
-				}elseif($resultCheck=="update"){
-					$sqlInsertlab_test_result="update lab_test_result set VisitingNumber='$VisitingNumber', ResultLab='".$ResultLab."', UnitCode=$UnitCode, ReferenceResult='$ReferenceResult', ResultUniversal='$ResultUniversal', UnitUniversal=$UnitUniversal, ReferenceUniversalTest='$ReferenceUniversalTest', LabResultDate='$LabResultDate', LabReporter=$LabReporter where LabTestID='$LabTestID' and UniversalTestID=$UniversalTestID and HospCode='$HospCode'";
-				}
-				$universalTestNamexx.="<tr><td>2Lab Result Detail Manage</td><td>".$sqlInsertlab_test_result."</td></tr>";
-				mysql_query($sqlInsertlab_test_result)or die(mysql_error()."<br>".$sqlInsertlab_test_result);
-			}
 		}
-		/*$i=0;
-		$LabResultDetail="";
-		
-		foreach ($LabDetail as $v1 => $value) {
-		$LabResultDetail.="<tr><td colspan='2' bgcolor='blue'>Lab no ".$i."</td></tr>";
-		$i++;
-			if(is_array($value)){
-				foreach ($value as $key => $valx) {
-					if(is_array($valx)){
-						foreach ($valx as $key2 => $valx2) {
-							if(is_array($valx2)){
-								$LabResultDetail.="<tr><td>".$key2."</td><td></td></tr>";
-								foreach ($valx2 as $key3 => $valx3) {
-									$LabResultDetail.="<tr><td>$i.".$key3."</td><td>".$valx3."</td></tr>";
-								}
-							}else{
-								$valstring=iconv("utf-8","tis-620",$valx2);
-								$LabResultDetail.="<tr><td>x$i.".$key2."</td><td>x".$valstring."</td></tr>";
-							}
-						}
-					}else{
-						$LabResultDetail.="<tr><td>s$i.".$key."</td><td>".$valx."</td></tr>";
-					}
-				}
-			}else{
-				$LabResultDetail.="<tr><td>$i.".$v1."</td><td>".$value."</td></tr>";
-			}
-		}*/
 		
 		//=============== Finsh Parse labResult detail Element ===================
 		$patient="<tr><td colspan='2' bgcolor='yellow'>Patient</td></tr>";
@@ -502,37 +464,11 @@
 		$string.=$DocumentIDx;
 		
 		$string.=$patient.$labResult.$universalTestNamex."<tr><td>ddd".$errorCheck."ddd</td></tr>".$LabResultDetail;
+		//$string="Insert Complete";
 		
 		
-		/*$i=0;
-		foreach ($params as $v1 => $value) {
-		$i++;
-			if(is_array($value)){
-				//$string.="$i.Array";
-				foreach ($value as $key => $valx) {
-					if(is_array($valx)){
-						foreach ($valx as $key2 => $valx2) {
-							if(is_array($valx2)){
-								$string.="<tr><td>".$key2."</td><td></td><td></td></tr>";
-								foreach ($valx2 as $key3 => $valx3) {
-									$string.="<tr><td>-</td><td>$i.".$key3."</td><td>".$valx3."</td></tr>";
-								}
-							}else{
-								//$valstring=iconv("tis-620","tis-620",$valx2);
-								$valstring=iconv("utf-8","tis-620",$valx2);
-								$string.="<tr><td>x$i.".$key2."</td><td>x".$valstring."</td></tr>";
-							}
-						}
-					}else{
-						$string.="<tr><td>s$i.".$key."</td><td>".$valx."</td></tr>";
-					}
-				}
-			}else{
-				$string.="<tr><td>$i.".$v1."</td><td>".$value."</td></tr>";
-			}
-		}*/
-		//$string.="</table>";
-		$string="Data ".$resultCheck;//.$universalTestNamexx;
+		$string.="</table>";
+		//$string.=$params;
 		return $string;
 	}
 	

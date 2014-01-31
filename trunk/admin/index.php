@@ -14,18 +14,21 @@
 	$(function(){
 		$('document').ready(function(){
 			$('#menu_config').click(function(){
+                                $('#container').html('Loading..');
 				$.post('preference.php',function(data){
 					$('#container').html(data);
 				})
 			});
 
 			$('#menu_administrator').click(function(){
+                                $('#container').html('Loading..');
 				$.post('administrator.php',function(data){
 					$('#container').html(data);
 				});
 			});
 
 			$('#menu_vaccine').click(function(){
+                                $('#container').html('Loading..');
 				$.post('vaccine.php',function(data){
 					$('#container').html(data);
 				});
@@ -38,14 +41,23 @@
 			$('#menu_unit').click(function(){
 				alert('Under Construction');
 			});
+			
+			$('#menu_utest').click(function(){
+				$('#container').html('Loading..');
+				$.post('labList.php',function(data){
+					$('#container').html(data);
+				});
+			});
 
 			$('#menu_changePassword').click(function(){
+                $('#container').html('Loading..');
 				$.post('changePassword.php',function(data){
 					$('#container').html(data);
 				});
 			});
 
 			$('#menu_logHistory').click(function(){
+                $('#container').html('Loading..');
 				$.post('logHistory.php',function(data){
 					$('#container').html(data);
 				});
@@ -97,6 +109,9 @@
 									<?php
 								} 
 							?>
+                                                        <tr>
+								<td id="menu_utest" class="mainMenu_item">รายการแล็บ</td>
+							</tr>
 							<tr style="display: none">
 								<td id="menu_unit" class="mainMenu_item">Unit</td>
 							</tr>

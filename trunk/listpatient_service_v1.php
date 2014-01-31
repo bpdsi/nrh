@@ -14,7 +14,7 @@
 			";
 		}
 		if(trim($HospitalNumber)!=""){
-			if(trim($Hospital)!="" and is_numeric(trim($Hospital))){
+			if(trim($Hospital)!=""){
 			$where.="
 				and	hospital_patient.HospCode in( ".$Hospital.") and
 						hospital_patient.HospitalNumber in( ".$HospitalNumber.")";
@@ -22,17 +22,7 @@
 				$where.="and hospital_patient.HospitalNumber in( ".$HospitalNumber.")";
 			}
 		}
-		if(!is_numeric(trim($Hospital))){
-			$stuff_array   = array(); 
-			$stuff_array2   = array(); 
-			$stuff_array["CitizenID"]="";
-			$stuff_array["Hospital"]="Error Worng Hospital";
-			$stuff_array["HospitalNumber"]="";
-			$stuff_array["VisitingNumber"]="";
-			$stuff_array2[]=$stuff_array;
-			return $stuff_array2;
-		}
-		if(trim($Hospital)!="" and is_numeric(trim($Hospital))){
+		if(trim($Hospital)!=""){
 			$where.=" and	hospital_patient.HospCode in( ".$Hospital.")";
 		}
 		if(trim($AllowDate)!=""){
