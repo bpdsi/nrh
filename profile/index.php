@@ -2,6 +2,11 @@
 	$functionName="Profile (ข้อมูลผู้ใช้ระบบ)";
 	include "../template/header.php";
 ?>
+<style>
+    .displayNone{
+        display:none;            
+    }    
+</style>
 <div id="accountEditDIV" class="form border_solid"
 	style="
 		display: none;
@@ -131,9 +136,9 @@
 							</tr>
 							<tr>
 								<td class="form_field">วัน เดือน ปีเกิด</td>
-								<td class="form_input"><?php echo $person[BirthDate]?></td>
+                                                                <td class="form_input"><?php echo dateEncodeBE($person[BirthDate]);?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">สถานที่เกิด</td>
 								<td class="form_input"><?php echo $person[BirthJurisdictionCountrySubDivision]?></td>
 							</tr>
@@ -141,11 +146,11 @@
 								<td class="form_field">กรุ๊ปเลือด</td>
 								<td class="form_input"><?php echo $person[BloodGroupABO]?> <?php echo $person[BloodTypeRh]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">สัญชาติ</td>
 								<td class="form_input"><?php echo $person[Nationality]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">ศาสนา</td>
 								<td class="form_input"><?php echo $person[Religion]?></td>
 							</tr>
@@ -162,35 +167,35 @@
 								<td class="form_field">หมายเลขโทรศัพท์</td>
 								<td class="form_input"><?php echo $person[Telephone]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">บ้านเลขที่</td>
 								<td class="form_input"><?php echo $person[BuildingNumber]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">ตรอก</td>
 								<td class="form_input"><?php echo $person[SubLane]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">ซอย</td>
 								<td class="form_input"><?php echo $person[Lane]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">ถนน</td>
 								<td class="form_input"><?php echo $person[StreetName]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">ตำบล</td>
 								<td class="form_input"><?php echo $person[SubDistrict]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">อำเภอ</td>
 								<td class="form_input"><?php echo $person[District]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">จังหวัด</td>
 								<td class="form_input"><?php echo $person[Province]?></td>
 							</tr>
-							<tr>
+							<tr class="displayNone">
 								<td class="form_field">รหัสไปรษณีย์</td>
 								<td class="form_input"><?php echo $person[Postcode]?></td>
 							</tr>

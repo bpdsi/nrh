@@ -344,6 +344,7 @@
 			โรงพยาบาล
 			<select id="hospcode"
 				onchange="
+                                        $('#contentTD').html('Loading..');
 					$.post('showAdmin.php',{
 							hospcode: $(this).val()
 						},function(data){
